@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\testApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\helios_addons\ofxIisu\src\CloseIisuServer.cpp">
+      <Filter>helios_addons\ofxIisu\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\helios_addons\ofxIisu\src\HandCursor.cpp">
+      <Filter>helios_addons\ofxIisu\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\helios_addons\ofxIisu\src\IisuServer.cpp">
+      <Filter>helios_addons\ofxIisu\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxTweenzor\src\Tween.cpp">
+      <Filter>addons\ofxTweenzor\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxTweenzor\src\Tweenzor.cpp">
+      <Filter>addons\ofxTweenzor\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="helios_addons">
+      <UniqueIdentifier>{744c70eb-1bc2-4a8e-8e3b-cc97e024f171}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons">
+      <UniqueIdentifier>{97806eac-2629-48c3-b95d-d8adc0bade81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxTweenzor">
+      <UniqueIdentifier>{b91253fc-3abd-496c-b0cd-bc3393e0522f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxTweenzor\src">
+      <UniqueIdentifier>{d568b4b6-1206-4328-8821-26261f1acef1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="helios_addons\ofxIisu">
+      <UniqueIdentifier>{0b703f65-c1e6-43fc-898d-9c32abbbf6cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="helios_addons\ofxIisu\src">
+      <UniqueIdentifier>{1fd50fc2-20e6-4ed8-8958-b3008497f35b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="helios_addons\Debug">
+      <UniqueIdentifier>{59be0e75-0f89-40d4-a7a0-f668a05fd048}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\testApp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\helios_addons\ofxIisu\src\CloseIisuServer.h">
+      <Filter>helios_addons\ofxIisu\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\helios_addons\ofxIisu\src\DepthCursor.h">
+      <Filter>helios_addons\ofxIisu\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\helios_addons\ofxIisu\src\HandCursor.h">
+      <Filter>helios_addons\ofxIisu\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\helios_addons\ofxIisu\src\IisuEventArgs.h">
+      <Filter>helios_addons\ofxIisu\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\helios_addons\ofxIisu\src\IisuEvents.h">
+      <Filter>helios_addons\ofxIisu\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\helios_addons\ofxIisu\src\IisuServer.h">
+      <Filter>helios_addons\ofxIisu\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\helios_addons\ofxIisu\src\ofxIisu.h">
+      <Filter>helios_addons\ofxIisu\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxTweenzor\src\ofxTweenzor.h">
+      <Filter>addons\ofxTweenzor\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxTweenzor\src\Tween.h">
+      <Filter>addons\ofxTweenzor\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxTweenzor\src\TweenEvent.h">
+      <Filter>addons\ofxTweenzor\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxTweenzor\src\TweenFunctions.h">
+      <Filter>addons\ofxTweenzor\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxTweenzor\src\TweenSelector.h">
+      <Filter>addons\ofxTweenzor\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxTweenzor\src\Tweenzor.h">
+      <Filter>addons\ofxTweenzor\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\helios_addons\Debug\HeliosDebug.h">
+      <Filter>helios_addons\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\helios_addons\ofxIisu\src\InteractionManager.h">
+      <Filter>helios_addons\ofxIisu\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\helios_addons\ofxIisu\src\IisuUserRepresentation.h">
+      <Filter>helios_addons\ofxIisu\src</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
