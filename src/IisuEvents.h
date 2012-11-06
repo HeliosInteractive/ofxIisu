@@ -21,11 +21,18 @@ class IisuEvents
 		ofEvent<int> CURSOR_HOVER_FINISHED ; 
 		ofEvent<int> CURSOR_HOVER_INTERRUPTED ; 
 
+		ofEvent<int> USER_DETECTED ;
+		ofEvent<int> USER_LOST ; 
+
 		ofEvent<int> HAND_CLOSE ; 
 		ofEvent<int> HAND_OPEN ; 
-
 		ofEvent<int> POSE_GESTURE ; 
-		ofEvent<int> THUMBS_UP ; 
+		ofEvent<int> HAND_CALIBRATED ; 
+
+		ofEvent<int> IDLE_INSTRUCTIONS ; 
+		ofEvent<int> CURSOR_DETECTED ; 
+		ofEvent<int> CURSOR_LOST ; 
+		ofEvent<int> CURSOR_DESTROYED ; 
 		
 };
 

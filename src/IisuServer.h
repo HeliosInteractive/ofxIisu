@@ -29,35 +29,53 @@ class IisuServer
 		Device *		m_device;			// pointer to the iisu device
 
 		//Data Handles
-		DataHandle<bool>						m_controllerIsActiveData;
-		DataHandle<SK::Vector3>					m_pointerCoordinatesData;
-		DataHandle<int32_t>						m_pointerStatusData;
-		ParameterHandle<int32_t>				m_centroidCountParameter ; 
-		DataHandle<SK::Array<SK::Vector3>>		m_centroidPositionsData ; 
-		DataHandle< SK::Image > sceneImageHandle ;
-		SK::Image sceneImage ; 
-
-
-		/*		Skeleton Stuff		*/
-		SK::DataHandle<int>				m_skeletonStatusData;
-		SK::DataHandle<SK::Array<SK::Vector3> > m_keyPointsData;
-		SK::DataHandle<SK::Array<float> > m_keyPointsConfidenceData;
-
-		//Trying this out : 
+		//User
+		DataHandle<SK::Vector3>					m_user1MassCenterData ; 
+		DataHandle<bool>						m_userIsActiveData ; 
 		DataHandle < int32_t >					m_user1SceneID ; 
 
+		//UI Pointers
+		vector<DataHandle<bool>>				controllerIsActiveData ; 
+		vector<DataHandle<SK::Vector3>>			pointerNormalizedCoordinatesData ; 
+		vector<DataHandle<int32_t>>				pointerStatusData ; 
+		
+		//Camera
+		DataHandle< SK::Image >					sceneImageHandle ;
+
+		//Skeleton Stuff + Volume
+		SK::DataHandle<int>						m_skeletonStatusData;
+		SK::DataHandle<SK::Array<SK::Vector3> >	m_keyPointsData;
+		SK::DataHandle<SK::Array<float> >		m_keyPointsConfidenceData;
+
+		ParameterHandle<int32_t>				m_centroidCountParameter ; 
+		DataHandle<SK::Array<SK::Vector3>>		m_centroidPositionsData ; 
+		DataHandle< SK::Array<int> >			m_centroidsJumpStatusHandle ;
+		
+		//Data
+		//USER
+		SK::Vector3								m_user1MassCenter ; 
 		int32_t									user1SceneID ; 
 		int32_t									m_lastFrameID;		//ID of the last Frame
-		bool									m_controllerIsActive ;
-		int32_t									m_pointerStatus ;
-		SK::Vector3								m_pointerPosition ;
+		bool									m_userIsActive ;
+
+		//UI Pointers
+		vector<bool>							controllerIsActive ; 
+		vector<int32_t>							pointerStatus ; 
+		vector<Vector3>							pointerNormalizedCoordinates ; 
+	
+		//Skeleton + Volume
+		int32_t									m_skeletonStatus ; 
+		SK::Array<SK::Vector3>					m_keyPoints ;
+		SK::Array<float>						m_keyPointsConfidence;
+		int32_t									last_skeletonStatus ;
 		int32_t									m_centroidCount ; 
 		SK::Array<SK::Vector3>					m_centroidPositions ; 
+		SK::Array<int>							m_centroidJumpStatus ; 
 
-		int32_t									m_skeletonStatus ; 
-		SK::Array<SK::Vector3> m_keyPoints ;
-		SK::Array<float> m_keyPointsConfidence;
-		
+		//Camera
+		SK::Image								sceneImage ; 
+	
+	
 
 		// events callbacks
 		void onError(const ErrorEvent& event);
@@ -66,11 +84,17 @@ class IisuServer
 
 		void setup() ; 
 		void initIisu() ; 
+		int addController( ) ;
 		void exit( int exitCode = -1 ) ; 
 		void onControllerCreated(SK::ControllerCreationEvent event);
 		void onCircleGesture(SK::CircleGestureEvent event);
 
+		int getCursorStatus ( int cursorID ) ; 
+		Vector3 getNormalizedCursorCoordinates ( int cursorID ) ; 
+		Vector3 getWorldCursorPosition( int cursorID ) ; 
+
 		ofVec3f iisuPointToOF( Vector3 point ) ; 
+		ofVec3f iisuPointToOF( Vector3 point , ofVec3f range ) ; 
 		ofVec3f IIsuPosition3DToOfxScreen( Vector3 IisuPosition , ofRectangle bounds , bool mirrorX = false , bool mirrorY = false ) ; 
 };
 

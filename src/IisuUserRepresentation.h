@@ -4,8 +4,15 @@
 #include "IisuServer.h" 
 #include "ofMain.h" 
 #include "InteractionManager.h"
+#include "ApplicationEvents.h"
+#include "EmiratesGlobal.h"
+#include "ofxOpenCv.h"
+
 //#include "CrossFadeImage.h"
 
+#include "ofThread.h"
+
+static ofMutex myMutex ;
 
 enum POINTER_STATUS
 {
@@ -19,14 +26,20 @@ enum POINTER_STATUS
 class IisuUserRepresentation
 {
 	public : 
-		IisuUserRepresentation( ) { } 
 
+		IisuUserRepresentation( ) 
+		{
+		} 
+		virtual ~IisuUserRepresentation( ) { } 
+
+		
 		IisuServer * iisu ; 
 		
 		ofImage sceneImage ; 
 		ofImage userImage ; 
 
 		unsigned char rawPixels[120 * 160];
+		unsigned char grayPixels[120 * 160];
 
 		int lastUserID ; 
 
@@ -39,55 +52,52 @@ class IisuUserRepresentation
 		int maxMappedBrightness ; 
 
 		int pPointerStatus ; 
+ 
+		//OpenCV to get vector outlines
+		ofxCvGrayscaleImage 	grayImage;
+		ofxCvContourFinder 		contourFinder;
 		
-		float width , height ; 
-		bool bMirrorX , bMirrorY ; 
+		int imageWidth , imageHeight ; 
 
-		void setup ( float _width , float _height , bool _bMirrorX = false , bool _bMirrorY = false ) 
+		void setup ( int _w = 160 , int _h = 120 ) 
 		{
-			width = _width ; 
-			height = _height ; 
-			bMirrorX = _bMirrorX ; 
-			bMirrorY = _bMirrorY ; 
-			
+			imageWidth = _w ; 
+			imageHeight = _h ; 
 			pPointerStatus = -3 ; 
 			lastFrame= -4 ; 
-			sceneImage.allocate( width , height , OF_IMAGE_GRAYSCALE ) ; 
-			userImage.allocate ( width , height , OF_IMAGE_GRAYSCALE ) ; 
+			sceneImage.allocate( imageWidth , imageHeight , OF_IMAGE_GRAYSCALE ) ; 
+			userImage.allocate ( imageWidth , imageHeight , OF_IMAGE_GRAYSCALE ) ; 
 
+			//grayImage.allocate( imageWidth , imageHeight );
+			//grayImage.setUseTexture( false ) ; 
 			lastUserID = 0 ; 
 		
 			minMappedBrightness = 1 ; 
 			maxMappedBrightness = 255 ; 
-
-		} 
+		}
 
 		void update ( ) 
 		{
-			//Get our status
-			getStatusString( iisu->m_pointerStatus ) ; 
 
-			//Make sure that the sceneImage is initialized and working correctly
+//			getStatusString( iisu->m_pointerStatus ) ; 
+			
 			if ( iisu->sceneImageHandle.isValid() == 1 )
 			{
-				//Check frame overlap
-				if ( lastFrame == iisu->m_lastFrameID )
-				{
-					cout << "repeat frame! " << endl ; 
-					return ; 
-				}
+				//cout << "VALID! " << endl ;
+				int totalPixels = imageWidth * imageHeight ;
 
-				int totalPixels = 160 * 120 ; 
-				//Awesomely added by Andy Warner ; 
-				unsigned char * pRawPixels = iisu->sceneImage.getRAW() ;
-				//memcpy prevents it from having read/write at the same time issues
+				//Awesomely added by Andy Warner
+				unsigned char * pRawPixels = iisu->sceneImage.getRAW() ; 
 				memcpy(rawPixels, pRawPixels, totalPixels);
 
 				int userValue = iisu->user1SceneID ; 
+				
 				sceneImage.setFromPixels( rawPixels, sceneImage.width , sceneImage.height , OF_IMAGE_GRAYSCALE , true ) ;
-				sceneImage.mirror( bMirrorX , bMirrorY ) ; 
+				sceneImage.mirror( false , true ) ; 
 
-				//If over 250 then the user rep is not valid.
+				int maxBrightness = 255; 
+				int minBrightness = 1 ; 
+
 				if ( userValue < 250 ) 
 				{
 					for ( int i = 0 ; i < totalPixels ; i++ ) 
@@ -99,24 +109,22 @@ class IisuUserRepresentation
 						}
 						else
 							rawPixels[i] = 255 ; 
+						//{
+							/*
+							//rawPixels[i] = 255 - rawPixels[i] ;
+							if ( value > maxBrightness ) 
+								maxBrightness = value ; 
+
+							if ( value < minBrightness )
+								minBrightness = value ; 
+							//maxBrightness = ( value > maxBrightness ) ? rawPixels[i] : maxBrightness ; 
+							//minBrightness = ( value < minBrightness ) ? rawPixels[i] : minBrightness ; 
+							*/
+						//}
+						//	 
 					}
 
-
-					/* 
-					//Trying to map the depth map of a user to have some dimensions
-			
-					int maxBrightness = 255; 
-					int minBrightness = 1 ; 
-
-					//rawPixels[i] = 255 - rawPixels[i] ;
-					if ( value > maxBrightness ) 
-						maxBrightness = value ; 
-
-					if ( value < minBrightness )
-						minBrightness = value ; 
-					//maxBrightness = ( value > maxBrightness ) ? rawPixels[i] : maxBrightness ; 
-					//minBrightness = ( value < minBrightness ) ? rawPixels[i] : minBrightness ; 
-					
+					/*
 					cout << "minBrightness : " << ofToString(minBrightness) << " <-> " << ofToString(maxBrightness) << endl ; 
 					
 					if ( minBrightness < maxBrightness )
@@ -126,9 +134,7 @@ class IisuUserRepresentation
 						{
 							rawPixels[p] = ofMap( rawPixels[p] , minBrightness , maxBrightness  , minMappedBrightness , maxMappedBrightness ) ; 
 						}
-					}
-					*/
-					
+					}*/
 				}
 				else
 				{
@@ -139,13 +145,134 @@ class IisuUserRepresentation
 				}
 
 				userImage.setFromPixels( rawPixels, sceneImage.width , sceneImage.height , OF_IMAGE_GRAYSCALE , true ) ;
-				userImage.mirror( bMirrorX , bMirrorY ) ; 
+				userImage.mirror( false , true ) ; 
 	
 				if ( userValue != lastUserID ) 
 				{
 					lastUserID = userValue ; 
 				}
+
+
+			//	int totalPixels = imageWidth * imageHeight ;
+			memcpy(grayPixels , rawPixels, totalPixels );
+				//mutex.lock( ) ; 
+			grayImage.setFromPixels( rawPixels ,  sceneImage.width , sceneImage.height ) ; 
+			grayImage.mirror( false , true ) ; 
+			grayImage.blurGaussian( 11 ) ;
+			grayImage.flagImageChanged();
+			
+
+
+			//contourFinder.findContours( grayImage, 100 , (imageWidth*imageHeight)/3, 1 , true , true );	// find holes
+					
 			}
+		}
+
+
+		void drawVectorUserRep ( float x , float y , float width , float height , float simplify  ) 
+		{
+			ofPushMatrix() ; 
+				ofPushStyle() ; 
+				ofTranslate( x , y ) ; 
+				
+				/*
+				if ( contourFinder.nBlobs > 0 ) 
+				{
+					ofNoFill ( ) ; 
+					int nBlobs = contourFinder.blobs.size() ; 
+					vector<ofxCvBlob>  blobs = contourFinder.blobs ; 
+					ofRectangle bounds ; 
+
+					for( int i=0; i< nBlobs ; i++ ) {
+
+						bounds = blobs[i].boundingRect ; 
+					}
+					
+					float xRatio = bounds.x / imageWidth ; 
+					float yRatio = bounds.y / imageHeight ; 
+					float wRatio = bounds.width / imageWidth ; 
+					float hRatio = bounds.height / imageHeight ; 
+
+		
+					ofPath path ; 
+					float userRepAlpha = 80 ; 
+					path.setFillColor( ofColor( 0 , 0 , 0 , userRepAlpha ) ) ; 
+					path.setStrokeColor( ofColor ( EmiratesGlobal::Instance()->EMIRATES_RED ,  255 ) ) ;
+					path.setStrokeWidth( 4 ) ; 
+
+					//Convert all openCV points to normalized coordinates within the texture,
+					//this is done so we can scale the points position and place them larger on the screen.
+
+					for( int i=0; i< nBlobs ; i++ ) {
+						ofNoFill();
+				
+						vector<ofPoint> normalizedPoints ; 
+						
+						for( int j=1; j<blobs[i].nPts; j++ )
+						{
+							ofPoint p = ofPoint ( blobs[i].pts[j].x, blobs[i].pts[j].y  ) ; 
+
+							p.x /= imageWidth ;  
+							p.y /= imageHeight ; 
+							normalizedPoints.push_back( p ) ; 
+						}
+					}
+
+
+						//>>>>>>>>>>>>>>>>>>>>>>>BEGIN
+					//ofPath outlinePath ; 
+					ofPolyline line ; 
+					//ofPath path ; 
+
+						for( int i=0; i< nBlobs ; i++ ) {
+						ofNoFill();
+
+						vector<ofPoint> normalizedPoints ; 
+
+						for( int j=1; j<blobs[i].nPts; j++ )
+						{
+							ofPoint p = ofPoint ( blobs[i].pts[j].x, blobs[i].pts[j].y  ) ; 
+
+							p.x /= imageWidth ;  
+							p.y /= imageHeight ; 
+							normalizedPoints.push_back( p ) ; 
+						}
+
+						for( int i = 0 ; i < normalizedPoints.size() ; i++ )
+						{
+							//ofPoint nPoint1 = normalizedPoints[ i - 1 ] ; 
+							ofPoint nPoint1 = normalizedPoints[ i ] ; 
+							nPoint1.x *= width ; 
+							nPoint1.y *= height ; 
+							//nPoint2.x *= width ; 
+							//nPoint2.y *= height ; 
+
+							//ofPoint mid = ( nPoint1 + nPoint2 ) / 2 ;  
+						//	line.bezierTo( nPoint1 , nPoint2 , mid , 16 ) ; 
+							line.lineTo( nPoint1.x , nPoint1.y  ) ;   
+						}
+
+						line.close( ) ; 
+						//line.close( ) ;
+						
+
+					}
+				
+					
+					ofSetColor ( EmiratesGlobal::Instance()->EMIRATES_RED , 165 ) ; 
+					ofSetLineWidth( 6 ) ; 
+					ofFill ( ) ; 
+			
+					ofPushMatrix( ) ;
+						line.getSmoothed( simplify ).draw( ) ;
+					ofPopMatrix( ) ; 
+					glPopMatrix();
+					ofPopStyle();
+						
+				}*/
+				ofPopStyle( ) ; 
+
+			ofPopMatrix() ; 
 		}
 
 		void draw ( float x , float y , float width , float height ) 
@@ -153,7 +280,8 @@ class IisuUserRepresentation
 			ofEnableAlphaBlending() ; 
 			ofPushMatrix() ; 
 
-			ofSetColor ( 255 , 255 , 255 ) ;
+				ofSetColor ( 255 , 255 , 255 ) ;
+/*
 				ofEnableAlphaBlending( ) ; 
 				ofPushStyle() ; 
 					ofSetColor( 15 , 15 , 15 ) ; 
@@ -165,11 +293,14 @@ class IisuUserRepresentation
 				ofSetColor ( 255 , 255 , 255 , 25 ) ; 
 				sceneImage.draw(  x , y , width , height  ) ; 
 				ofSetColor ( 0 , 255 , 0 , 195 ) ; 
+				*/
 				ofPushStyle() ; 
-					ofEnableBlendMode( OF_BLENDMODE_ADD ) ; 
+				//ofEnableBlendMode( OF_BLENDMODE_ADD ) ; 
+				ofSetColor( EmiratesGlobal::Instance()->EMIRATES_RED ) ; 
+					ofEnableBlendMode( OF_BLENDMODE_ALPHA ) ; 
 						userImage.draw ( x , y , width , height ) ;
 					ofDisableBlendMode( ) ; 
-				ofPopStyle() ; 
+				ofPopStyle() ;
 
 			ofPopMatrix() ; 
 		}
@@ -197,6 +328,8 @@ class IisuUserRepresentation
 					status = "OUT OF\n BOUNDS" ; 
 					break ;
 		}
+
+		//	cout << status << endl ; 
 
 		return status ; 
 	}

@@ -3,6 +3,7 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 
+	bDrawDebug = false ; 
 #ifndef MOUSE_DEBUG
 	ofAddListener ( IisuEvents::Instance()->exitApplication , this , &testApp::exitEventHandler ) ; 
 
@@ -10,56 +11,67 @@ void testApp::setup(){
 	iisuServer = new IisuServer() ; 
 	iisuServer->setup() ; 
 
-	userRep = IisuUserRepresentation() ; 
-	userRep.iisu = iisuServer ; 
-	userRep.setup( ) ; 
+	cursor0.setup( iisuServer , iisuServer->addController() , ofColor( 0 , 255 , 0 ) ) ; 
+	cursor1.setup( iisuServer , iisuServer->addController() , ofColor( 0 , 0 , 255 ) ) ; 
 
-
+	iisuServer->initIisu() ; 
 #endif
 
 	Tweenzor::init() ; 
 	ofSetVerticalSync( true ) ; 
 	ofSetFrameRate( 60 ) ; 
-
-	//hand = HandCursor() ; 
-	//hand.setup( ) ; 
-
-#ifndef MOUSE_DEBUG
-	//hand.iisu = &iisuServer ; 
-#endif
+	ofBackground( 45 ); 
 
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
 
+	ofSetWindowTitle( "FPS:" + ofToString( ofGetFrameRate() ) ) ; 
 	Tweenzor::update( ofGetElapsedTimeMillis() ) ; 
-
-	if ( ofGetElapsedTimef() > 6.0f ) 
-	{
+		
 	if ( iisuServer->m_device==NULL || iisuServer->m_iisuHandle==NULL )
-		{
-			cout << "Iisu is not initialized" <<endl;
-			getchar();
-			return ; 
-		}
-
-	userRep.update() ; 
+	{
+		cout << "Iisu is not initialized" <<endl;
+		//getchar();
+		return ; 
 	}
-//	hand.updateIisu( ) ;
+
+	cursor0.update( ) ; 
+	cursor1.update( ) ; 
+
+
+
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
-	
+	ofBackground( 128 ); 
 	ofSetColor( 255 , 255 , 255 ) ; 
-	userRep.draw( ) ; 
-//	hand.draw( ) ; 
+
+	cursor0.draw( ) ; 
+	cursor1.draw( ) ; 
+	
+
+	if ( bDrawDebug == true ) 
+	{
+		cursor0.debugDraw( ) ;
+		cursor1.debugDraw( ) ;
+	}
+
+	ofDrawBitmapString ( "'D' to toggle debug mode" , 25 , 25 ) ; 
+
 }
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
-
+	switch ( key ) 
+	{
+		case 'd':
+		case 'D':
+			bDrawDebug = !bDrawDebug ; 
+			break ; 
+	}
 }
 
 //--------------------------------------------------------------
@@ -128,9 +140,9 @@ void testApp::exit( )
 			SK::Result res = Context::Instance().destroyHandle( *iisuServer->m_iisuHandle );
 			if(res.failed())
 			{
-				cerr << "Failed to destroy handle!" << endl
+				cout << "Failed to destroy handle!" << endl
 					<< "Error " << res.getErrorCode() << ": " << res.getDescription().ptr() << endl;
-				getchar();
+				//getchar();
 			}
 			// cleat the iisu handle
 			iisuServer->m_iisuHandle = NULL;
@@ -139,5 +151,6 @@ void testApp::exit( )
 		// finalize context
 		Context::Instance().finalize();
 		ofSleepMillis( 5000 ) ; 
-	#endif*/
+	#endif
+	*/
 }

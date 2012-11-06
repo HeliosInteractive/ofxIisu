@@ -14,14 +14,14 @@ void testApp::setup(){
 	userRep.iisu = iisuServer ; 
 	userRep.setup( ) ; 
 
-	iisuSkeleton.iisu = iisuServer ; 
-	iisuSkeleton.setup( ) ; 
+	depthCursor.setup( iisuServer , 0 ) ; 
 
 #endif
 
 	Tweenzor::init() ; 
 	ofSetVerticalSync( true ) ; 
 	ofSetFrameRate( 60 ) ; 
+	ofBackground( 128 ); 
 
 	//hand = HandCursor() ; 
 	//hand.setup( ) ; 
@@ -30,99 +30,34 @@ void testApp::setup(){
 	//hand.iisu = &iisuServer ; 
 #endif
 
-	float dim = 24; 
-	float xInit = OFX_UI_GLOBAL_WIDGET_SPACING; 
-    float length = 320-xInit; 
-
-    drawPadding = false; 
-    
-    gui = new ofxUICanvas(0, 0, length+xInit, ofGetHeight());
-
-    gui->addWidgetDown(new ofxUILabel("IISU SKELETON PARAMETERS", OFX_UI_FONT_LARGE));         
-	//gui->addWidgetDown(new ofxUILabel("NORMAL SLIDER", OFX_UI_FONT_MEDIUM)); 	
-    gui->addWidgetDown(new ofxUISlider(length-xInit,dim, 0 , ofGetWidth() * 2 ,  iisuSkeleton.bounds.x , "BOUNDS X")); 
-	gui->addWidgetDown(new ofxUISlider(length-xInit,dim, 0 , ofGetWidth() * 2 ,  iisuSkeleton.bounds.y , "BOUNDS Y")); 
-	gui->addWidgetDown(new ofxUISlider(length-xInit,dim, 0 , ofGetWidth() ,  iisuSkeleton.bounds.width , "BOUNDS WIDTH")); 
-	gui->addWidgetDown(new ofxUISlider(length-xInit,dim, 0 , ofGetWidth() ,  iisuSkeleton.bounds.height , "BOUNDS HEIGHT")); 
-	gui->addWidgetDown(new ofxUILabelToggle( iisuSkeleton.bFlipX, "FLIP X", OFX_UI_FONT_MEDIUM)); 
-	gui->addWidgetDown(new ofxUILabelToggle( iisuSkeleton.bFlipY, "FLIP Y", OFX_UI_FONT_MEDIUM)); 
-
-	ofAddListener( gui->newGUIEvent,this,&testApp::guiEvent );	
-
-	gui->loadSettings( "GUI/iisuSkeleton.xml" ) ; 
-
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
 
 	Tweenzor::update( ofGetElapsedTimeMillis() ) ; 
-
+	
 	if ( ofGetElapsedTimef() > 6.0f ) 
 	{
-	if ( iisuServer->m_device==NULL || iisuServer->m_iisuHandle==NULL )
+		if ( iisuServer->m_device==NULL || iisuServer->m_iisuHandle==NULL )
 		{
 			cout << "Iisu is not initialized" <<endl;
 			getchar();
 			return ; 
 		}
-
-		iisuSkeleton.update ( ) ; 
+		depthCursor.update( ) ; 
 		userRep.update() ; 
 	}
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
-	ofBackground ( 125 , 125 , 125 ) ; 
+	ofBackground( 128 ); 
 	ofSetColor( 255 , 255 , 255 ) ; 
-	userRep.draw( ofGetWidth() - 170 , ofGetHeight() - 130 , 160 , 120 ) ; 
-
-	ofSetColor ( 255 , 255 , 255 ) ;
-	iisuSkeleton.draw( ) ;
+	userRep.draw( 25 , 25 , 320 , 240 ) ; 
+	depthCursor.draw( ) ; 
 }
 
-void testApp::guiEvent(ofxUIEventArgs &e)
-{
-	string name = e.widget->getName(); 
-	int kind = e.widget->getKind(); 
-
-	if(name == "BOUNDS X" )
-	{
-		iisuSkeleton.bounds.x = ((ofxUISlider *) e.widget)->getScaledValue() ; 
-	}
-
-	if(name == "BOUNDS Y" )
-	{
-		iisuSkeleton.bounds.y = ((ofxUISlider *) e.widget)->getScaledValue() ; 
-	}
-
-	if(name == "BOUNDS WIDTH" )
-	{
-		iisuSkeleton.bounds.width = ((ofxUISlider *) e.widget)->getScaledValue() ; 
-	}
-
-	if(name == "BOUNDS HEIGHT" )
-	{
-		iisuSkeleton.bounds.height = ((ofxUISlider *) e.widget)->getScaledValue() ; 
-	}
-
-	if(name ==  "FLIP X" )
-	{
-		iisuSkeleton.bFlipX = ((ofxUILabelToggle *) e.widget)->getValue() ; 
-	}
-
-	if(name ==  "FLIP Y" )
-	{
-		iisuSkeleton.bFlipY = ((ofxUILabelToggle *) e.widget)->getValue() ; 
-	}
-
-	gui->saveSettings( "GUI/iisuSkeleton.xml" ) ; 
-
-}
-		
-		
-		
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
 

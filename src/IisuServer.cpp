@@ -1,6 +1,5 @@
 #include "IisuServer.h"
 
-
 enum POINTER_STATUS
 {
 	POINTER_STATUS_NOT_DETECTED = 0,
@@ -14,7 +13,6 @@ void IisuServer::setup()
 {
 	// We need to specify where is located the iisu dll and it's configuration file.
 	// in this sample we'll use the SDK's environment variable.
-
 	string dllLocation = getenv("IISU_SDK_DIR") ;
 	dllLocation+="/bin" ;
 
@@ -56,40 +54,65 @@ void IisuServer::setup()
 	m_device = retDevice.get();
 
 	registerEvents() ; 
-	initIisu() ; 
+	//initIisu() ; 
 
 
-	SK::Result devStart = m_device->start();
-	if(devStart.failed())
-	{
-		cerr << "Failed to start device!" << endl
-			<< "Error " << devStart.getErrorCode() << ": " << devStart.getDescription().ptr() << endl;
-		getchar();
-		exit(0);
-	}
+	
 
 	m_skeletonStatus = 0 ; 
 }
 
+int IisuServer::addController( ) 
+{
+	int iisuIndex = controllerIsActiveData.size() + 1 ; 
 
+	string pointerString = "UI.CONTROLLER" + ofToString( iisuIndex ) ;
+
+	string activeString = pointerString +".IsActive"  ; 
+	controllerIsActiveData.push_back(  m_device->registerDataHandle<bool>( activeString.c_str() ) ) ;
+	controllerIsActive.push_back ( false ) ; 
+	
+	string normalizedString = pointerString + ".POINTER.NormalizedCoordinates" ; 
+	pointerNormalizedCoordinatesData.push_back( m_device->registerDataHandle<Vector3>( normalizedString.c_str() ) );
+	pointerNormalizedCoordinates.push_back( Vector3( ) ) ; 
+
+	string statusString = pointerString + ".POINTER.Status" ; 
+	pointerStatusData.push_back( m_device->registerDataHandle<int32_t>(statusString.c_str() ) );
+	pointerStatus.push_back( 0 ) ;
+
+	return ( iisuIndex - 1 ) ; 
+	
+}
 void IisuServer::initIisu() 
 {
-	m_controllerIsActiveData = m_device->registerDataHandle<bool>("UI.CONTROLLER1.IsActive");
-	m_pointerCoordinatesData = m_device->registerDataHandle<Vector3>("UI.CONTROLLER1.POINTER.NormalizedCoordinates");
-	m_pointerStatusData = m_device->registerDataHandle<int32_t>("UI.CONTROLLER1.POINTER.Status");
-	m_centroidCountParameter = m_device->registerParameterHandle<int32_t>( "SHAPE.CENTROIDS.Count" ) ; 
-	m_centroidCountParameter.set( 90 ) ; 
-	sceneImageHandle = m_device->registerDataHandle< SK::Image >("SCENE.LabelImage") ; 
-	m_centroidPositionsData = m_device->registerDataHandle<SK::Array<SK::Vector3>>("USER1.SHAPE.CENTROIDS.Positions") ; 
+	//User
+	m_user1SceneID = m_device->registerDataHandle<int32_t>("USER1.SceneObjectID") ; 
+	m_userIsActiveData = m_device->registerDataHandle<bool>("USER.IsActive") ; 
 
-	// we are only interested with one User 1 in this tutorial
+	/*
+	//Controller UI
+	m_controllerIsActiveData_0 = m_device->registerDataHandle<bool>("UI.CONTROLLER1.IsActive");
+	m_pointerNormalizedCoordinatesData_0 = m_device->registerDataHandle<Vector3>("UI.CONTROLLER1.POINTER.NormalizedCoordinates");
+	m_pointerStatusData_0 = m_device->registerDataHandle<int32_t>("UI.CONTROLLER1.POINTER.Status");
+	m_controllerIsActiveData_1 = m_device->registerDataHandle<bool>("UI.CONTROLLER2.IsActive");
+	m_pointerNormalizedCoordinatesData_1 = m_device->registerDataHandle<Vector3>("UI.CONTROLLER2.POINTER.NormalizedCoordinates");
+	m_pointerStatusData_1 = m_device->registerDataHandle<int32_t>("UI.CONTROLLER2.POINTER.Status");
+	*/
+	//Volume + Skeleton
 	m_skeletonStatusData = m_device->registerDataHandle<int>("USER1.SKELETON.Status");
 	m_keyPointsData = m_device->registerDataHandle<Array<Vector3> >("USER1.SKELETON.KeyPoints");
 	m_keyPointsConfidenceData = m_device->registerDataHandle<Array<float> >("USER1.SKELETON.KeyPointsConfidence");
+	m_centroidCountParameter = m_device->registerParameterHandle<int32_t>( "SHAPE.CENTROIDS.Count" ) ; 
+	m_centroidPositionsData = m_device->registerDataHandle<SK::Array<SK::Vector3>>("USER1.SHAPE.CENTROIDS.Positions") ;
+	m_user1MassCenterData = m_device->registerDataHandle<Vector3>("USER1.MassCenter") ; 
+	m_centroidsJumpStatusHandle = m_device->registerDataHandle< Array<int> >("USER1.SHAPE.CENTROIDS.JumpStatus" ) ; 
+
+	//Camera
+	sceneImageHandle = m_device->registerDataHandle< SK::Image >("SCENE.LabelImage") ; 
+
+	m_centroidCountParameter.set( 150 ) ; 
+
 	
-
-	m_user1SceneID = m_device->registerDataHandle<int32_t>("USER1.SceneObjectID") ; 
-
 	// we need it check if applicatin is set-up properly
 	//m_uiEnabledParameter = m_device->registerParameterHandle<bool>("UI.Enabled");
 	//m_controllersCount = m_device->registerParameterHandle<int32_t>("UI.ControllerCount");
@@ -114,11 +137,19 @@ void IisuServer::initIisu()
 	}
 
 	// register this object to listen for UI.CONTROLLERS.GESTURES.CIRCLE.Detected event (we might have controller already
-	// created but game is over, so another circle starts next game round)
 	res = m_device->getEventManager().registerEventListener("UI.CONTROLLERS.GESTURES.CIRCLE.Detected", *this, &IisuServer::onCircleGesture);
 	if (res.failed()) 
 	{
 		cerr << "Failed to register in iisu for UI.CONTROLLERS.GESTURES.CIRCLE.Detected events!" << endl;
+	}
+
+	SK::Result devStart = m_device->start();
+	if(devStart.failed())
+	{
+		cerr << "Failed to start device!" << endl
+			<< "Error " << devStart.getErrorCode() << ": " << devStart.getDescription().ptr() << endl;
+		getchar();
+		exit(0);
 	}
 }
 
@@ -131,18 +162,18 @@ void IisuServer::onError(const ErrorEvent& event)
 void IisuServer::onControllerCreated(ControllerCreationEvent event)
 {
 	//First controller created 
-	ofBackground ( 25 , 25 , 25 ) ; 
+	cout << "IisuServer::onControllerCreated !! " << endl ; 
 }
 
 void IisuServer::onCircleGesture(CircleGestureEvent event)
 {
-	//cout << "Circle gesture has been completed! " << endl ; 	
+	cout << "IisuServer::onCircleGesture !! " << endl ; 	
 }
 
 
 void IisuServer::onDataFrame(const DataFrameEvent& event)	
 {
-  	SK::Result resUpdate = m_device->updateFrame(true);
+  	SK::Result resUpdate = m_device->updateFrame( false ) ; 
 	if(resUpdate.failed())
 	{
 		cerr << "Failed to update data frame" << endl;
@@ -154,7 +185,7 @@ void IisuServer::onDataFrame(const DataFrameEvent& event)
 	if (currentFrameID == m_lastFrameID)
 	{
 		cout << "Same Frame as before" << endl ; 
-		return;
+		//return;
 	}
 	else
 	{
@@ -164,37 +195,62 @@ void IisuServer::onDataFrame(const DataFrameEvent& event)
 	// remember current frame id
 	m_lastFrameID = currentFrameID;
 
-	// check if controller is active
-	m_controllerIsActive = m_controllerIsActiveData.get();
+	//USER
+	m_user1MassCenter = m_user1MassCenterData.get() ; 
+	m_userIsActive = m_userIsActiveData.get() ; 
+	sceneImage = sceneImageHandle.get() ; 
+	user1SceneID = m_user1SceneID.get() ;
 
-	// get status of the pointer
-	m_pointerStatus = m_pointerStatusData.get();
+	//Look through all our cursor data
+	for ( int i = 0 ; i < pointerStatusData.size() ; i++ ) 
+	{
+		pointerStatus[ i ]  = pointerStatusData[ i ].get() ; 
+		pointerNormalizedCoordinates[ i ] = pointerNormalizedCoordinatesData[ i ].get() ; 
+		controllerIsActive[ i ] = controllerIsActiveData[ i ].get( ) ; 
+	}
 
+	/*
+	//UI + Controller
+	m_controllerIsActive_0 = m_controllerIsActiveData_0.get();
+	m_pointerStatus_0 = m_pointerStatusData_0.get();
+	m_pointerStatus_1 = m_pointerStatusData_1.get();
+
+	// if pointer is detected we can read it's coordinates
+	if ( m_pointerStatus_0 != POINTER_STATUS_NOT_DETECTED )
+	{
+		m_pointerNormalizedCoordinates_0 = m_pointerNormalizedCoordinatesData_0.get() ; 
+	}
+
+	if ( m_pointerStatus_1 != POINTER_STATUS_NOT_DETECTED ) 
+	{
+		m_pointerNormalizedCoordinates_1 = m_pointerNormalizedCoordinatesData_1.get() ; 
+	}*/
+
+	//Skeleton + Volume
 	m_centroidCount = m_centroidCountParameter.get() ; 
-	//cout << "centroid count is : " << m_centroidCount << endl;
 	m_centroidPositions = m_centroidPositionsData.get() ; 
+	m_skeletonStatus = m_skeletonStatusData.get() ; 	
 
-	// we are only interested with one User 1 in this tutorial
-	m_skeletonStatus = m_skeletonStatusData.get() ; // = m_device.registerDataHandle<int>("USER1.SKELETON.Status");
 	if ( m_skeletonStatus != 0 ) 
 	{
 		m_keyPoints = m_keyPointsData.get() ; 
 		m_keyPointsConfidence = m_keyPointsConfidenceData.get() ; 
+		m_centroidJumpStatus = m_centroidsJumpStatusHandle.get( ) ; 
 	}
 
-	// if pointer is detected we can read it's coordinates
-	if (m_pointerStatus != POINTER_STATUS_NOT_DETECTED )
+	if ( m_skeletonStatus != last_skeletonStatus ) 
 	{
-		m_pointerPosition = m_pointerCoordinatesData.get() ; 
-		//cout << m_pointerPosition << endl ; 
+		int args = 9 ; 
+		if ( m_skeletonStatus != 0 ) 
+			ofNotifyEvent( IisuEvents::Instance()->USER_DETECTED , args ) ; 
+		else
+			ofNotifyEvent( IisuEvents::Instance()->USER_LOST , args ) ; 
 	}
 
-	sceneImage = sceneImageHandle.get() ; 
-
-	user1SceneID = m_user1SceneID.get() ;
-	
 	// tell iisu we finished using data.
 	m_device->releaseFrame();
+
+	last_skeletonStatus = m_skeletonStatus ;
 }
 
 void IisuServer::registerEvents ( ) 
@@ -214,7 +270,7 @@ void IisuServer::registerEvents ( )
 		getchar();
 		exit();
 	}
-	
+
 	// a new dataframe has been computed by iisu
 	ret = m_iisuHandle->getEventManager().registerEventListener("DEVICE.DataFrame", *this, &IisuServer::onDataFrame);
 	if (ret.failed()) 
@@ -247,6 +303,32 @@ void IisuServer::registerEvents ( )
 	*/
 }
 
+int IisuServer::getCursorStatus ( int cursorID ) 
+{
+	if ( cursorID < pointerStatus.size() ) 
+		return pointerStatus[ cursorID ] ; 
+	else
+		cout << "IisuServer::getCursorStatus :: INVALID INDEX" << endl ; 
+	
+
+	return -1 ; 
+}
+
+Vector3 IisuServer::getNormalizedCursorCoordinates ( int cursorID ) 
+{	
+	if ( cursorID < pointerStatus.size() ) 
+		return pointerNormalizedCoordinates[ cursorID ] ;
+	else
+		cout << "IisuServer::getNormalizedCursorCoordinates :: INVALID INDEX" << endl ;
+
+	return Vector3( ) ; 
+}
+
+Vector3 IisuServer::getWorldCursorPosition( int cursorID ) 
+{
+	return Vector3() ; 
+}
+
 void IisuServer::exit ( int exitCode ) 
 {
 	m_iisuHandle->getEventManager().unregisterEventListener( "SYSTEM.Error" , *this , &IisuServer::onError ) ; 
@@ -260,6 +342,12 @@ void IisuServer::exit ( int exitCode )
 ofVec3f IisuServer::iisuPointToOF( Vector3 point )
 {
 	ofVec3f vector = ofVec3f( (( point.x +1.0f )/2.0f ) * ofGetWidth() ,ofGetHeight() +- ( ( point.z +1.0f ) /2.0f ) * ofGetHeight() ,  point.y ) ; 
+	return vector ; 
+}
+
+ofVec3f IisuServer::iisuPointToOF( Vector3 point , ofVec3f range ) 
+{
+	ofVec3f vector = ofVec3f( (( point.x +1.0f )/2.0f ) * range.x , ( ( point.z +1.0f ) /2.0f ) * range.y ,  point.y * range.z ) ; 
 	return vector ; 
 }
 

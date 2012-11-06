@@ -2,6 +2,13 @@
 [Tt]humbs.db
 *.DS_Store
 
+*.exe
+*.dll
+*.ilk
+*.lib
+*.exp
+*.pdb
+
 #Visual Studio files
 *.[Oo]bj
 *.user

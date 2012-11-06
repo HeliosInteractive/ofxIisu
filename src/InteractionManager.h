@@ -5,6 +5,7 @@
 #include "Events.h"
 #include "ofxIisu.h"
 #include "HeliosDebug.h" 
+#include "InstructionsScreen.h"
 
 class InteractionManager
 {
@@ -22,7 +23,7 @@ class InteractionManager
 			cursorExists = false;
 		} 
 
-		//InstructionsScreen instructions ; 
+		InstructionsScreen instructions ; 
 		int lastStatus ; 
 		IisuServer * iisu ; 
 		
@@ -134,7 +135,7 @@ class InteractionManager
 						timeSinceInstructionStarted = ofGetElapsedTimef() ; 
 						//Force the instructions to come on
 						instructionsNoCursor = false ; 
-					//	InteractionManager::Instance()->instructions.forceChange( 1 , 0.0f , currentMenuIndex ) ; 
+						InteractionManager::Instance()->instructions.forceChange( 1 , 0.0f , currentMenuIndex ) ; 
 					}
 				}
 
@@ -145,7 +146,7 @@ class InteractionManager
 					if ( currentMenuIndex != 3 ) 
 					{
 						//transition out instructions 
-						//InteractionManager::Instance()->instructions.forceChange( 0 , 0.0f , 3 ) ; 
+						InteractionManager::Instance()->instructions.forceChange( 0 , 0.0f , 3 ) ; 
 						//reset times
 						timeSinceInstructionStarted = -2 ; 
 						idleTime = -2 ; 
@@ -179,10 +180,10 @@ class InteractionManager
 				idleTime = -2 ; 
 				cout << "user interaction has idled out! " << endl ; 
 				int status = 0 ; //( bInstructionsIdle == true ) ? 1 : 0 ; 
-				//ofNotifyEvent( IisuEvents::Instance()->IDLE_INSTRUCTIONS , status ) ; 
+				ofNotifyEvent( IisuEvents::Instance()->IDLE_INSTRUCTIONS , status ) ; 
 				//MenuOptionEventArgs args = MenuOptionEventArgs( "STEP FORWARD TO INTERACT" ,  3 ) ; 
 				user.bActive = false ; 
-			//	ofNotifyEvent( Events::Instance()->MENU_OPTION_SELECTED , args , this ) ; 
+			// 	ofNotifyEvent( Events::Instance()->MENU_OPTION_SELECTED , args , this ) ; 
 		}
 
 		void forceIdleStart( ) 
@@ -259,13 +260,13 @@ class InteractionManager
 			SCREENSAVER = 3 
 		};
 
+		float timeSinceInstructionStarted;
 		void setTimeSinceInstructions ( float _value ) 
 		{
 			timeSinceInstructionStarted = _value ; 
 		} ;
 
-		protected : 
-			float timeSinceInstructionStarted;
+			
 
 	
 };
