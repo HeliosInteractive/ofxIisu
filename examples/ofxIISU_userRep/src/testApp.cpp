@@ -9,7 +9,8 @@ void testApp::setup(){
 	//Setup IISU server
 	iisuServer = new IisuServer() ; 
 	iisuServer->setup() ; 
-
+	iisuServer->initIisu( ) ; 
+		
 	userRep = IisuUserRepresentation() ; 
 	userRep.iisu = iisuServer ; 
 	userRep.setup( ) ; 
