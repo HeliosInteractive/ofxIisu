@@ -33,4 +33,7 @@ class IisuSkeleton
 		ofRectangle bounds ;
 		ofVec3f centroid ; 
 		bool bFlipX , bFlipY ; 
+
+		vector<ofPoint> rawPositions ; 
+		vector<ofPoint> positions ; 
 };

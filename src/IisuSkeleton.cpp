@@ -47,10 +47,14 @@ void IisuSkeleton::draw ( )
 		SK::Array<float> keyPointsConfidence = iisu->m_keyPointsConfidence ; 
 		ofSetColor ( ofColor::red ) ; 
 
+		rawPositions.clear( ) ; 
+		positions.clear( ) ; 
 		for ( int i = 0 ; i < keyPoints.size() ; i++ ) 
 		{
 			//Use the helper function to get the right coordinate spaces
+			rawPositions.push_back ( ofPoint ( keyPoints[i].x , keyPoints[i].y , keyPoints[i].z ) ) ; 
 			ofVec3f p = iisu->IIsuPosition3DToOfxScreen( keyPoints[i] , bounds , bFlipX , bFlipY ) ; 
+			positions.push_back( p ) ; 
 			ofPushMatrix() ; 
 				ofTranslate( p.x , p.y , p.z * 400 ) ; 
 				ofSphere( 0 , 0 , 0, 8 ) ; 
