@@ -23,12 +23,15 @@
 
 */
 
+If you notice any issues please submit them on github ! And I will get to them.
+
 This addon is written specifically for the iisu 3.5 SDK
 
 External Dependencies
 
 ofxTweenzor - https://github.com/NickHardeman/ofxTweenzor
 ofxUI - https://github.com/rezaali/ofxUI
+
 
 Examples :
 	ofxIISU_skeleton_tracking - simple example with skeleton tracking and rendering
