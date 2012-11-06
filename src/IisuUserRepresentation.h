@@ -3,12 +3,9 @@
 
 #include "IisuServer.h" 
 #include "ofMain.h" 
-#include "InteractionManager.h"
-#include "ApplicationEvents.h"
-#include "EmiratesGlobal.h"
-#include "ofxOpenCv.h"
 
-//#include "CrossFadeImage.h"
+//Still working on the openCV stuff
+//#include "ofxOpenCv.h"
 
 #include "ofThread.h"
 
@@ -27,9 +24,7 @@ class IisuUserRepresentation
 {
 	public : 
 
-		IisuUserRepresentation( ) 
-		{
-		} 
+		IisuUserRepresentation( ) { } 
 		virtual ~IisuUserRepresentation( ) { } 
 
 		
@@ -54,8 +49,8 @@ class IisuUserRepresentation
 		int pPointerStatus ; 
  
 		//OpenCV to get vector outlines
-		ofxCvGrayscaleImage 	grayImage;
-		ofxCvContourFinder 		contourFinder;
+		//ofxCvGrayscaleImage 	grayImage;
+		//ofxCvContourFinder 		contourFinder;
 		
 		int imageWidth , imageHeight ; 
 
@@ -154,15 +149,12 @@ class IisuUserRepresentation
 
 
 			//	int totalPixels = imageWidth * imageHeight ;
-			memcpy(grayPixels , rawPixels, totalPixels );
+			//memcpy(grayPixels , rawPixels, totalPixels );
 				//mutex.lock( ) ; 
-			grayImage.setFromPixels( rawPixels ,  sceneImage.width , sceneImage.height ) ; 
-			grayImage.mirror( false , true ) ; 
-			grayImage.blurGaussian( 11 ) ;
-			grayImage.flagImageChanged();
-			
-
-
+			//grayImage.setFromPixels( rawPixels ,  sceneImage.width , sceneImage.height ) ; 
+			//grayImage.mirror( false , true ) ; 
+			//grayImage.blurGaussian( 11 ) ;
+			//grayImage.flagImageChanged();
 			//contourFinder.findContours( grayImage, 100 , (imageWidth*imageHeight)/3, 1 , true , true );	// find holes
 					
 			}
@@ -281,22 +273,9 @@ class IisuUserRepresentation
 			ofPushMatrix() ; 
 
 				ofSetColor ( 255 , 255 , 255 ) ;
-/*
-				ofEnableAlphaBlending( ) ; 
-				ofPushStyle() ; 
-					ofSetColor( 15 , 15 , 15 ) ; 
-					ofNoFill( ) ; 
-					ofSetRectMode( OF_RECTMODE_CORNER ) ;
-					ofRect( x , y , width , height ) ; 
-				ofPopStyle() ; 
-				
-				ofSetColor ( 255 , 255 , 255 , 25 ) ; 
-				sceneImage.draw(  x , y , width , height  ) ; 
-				ofSetColor ( 0 , 255 , 0 , 195 ) ; 
-				*/
 				ofPushStyle() ; 
 				//ofEnableBlendMode( OF_BLENDMODE_ADD ) ; 
-				ofSetColor( EmiratesGlobal::Instance()->EMIRATES_RED ) ; 
+				ofSetColor( 255 , 255 , 255 ) ; 
 					ofEnableBlendMode( OF_BLENDMODE_ALPHA ) ; 
 						userImage.draw ( x , y , width , height ) ;
 					ofDisableBlendMode( ) ; 
@@ -304,34 +283,5 @@ class IisuUserRepresentation
 
 			ofPopMatrix() ; 
 		}
-			
-	
-
-		string getStatusString ( int pointerStatus ) 
-		{
-			string status = "" ; 
-			switch ( pointerStatus ) 
-			{
-				case 0 : 
-					status = "CIRCLE TO\n ACTIVATE" ; 
-					break ; 
-
-				case 3 : 
-					status = "USER ENGAGED" ; 
-					break ; 
-
-				case 1 : 
-					status = "HAND STILL" ; 
-					break ; 
-
-				case 2 : 
-					status = "OUT OF\n BOUNDS" ; 
-					break ;
-		}
-
-		//	cout << status << endl ; 
-
-		return status ; 
-	}
 
 };

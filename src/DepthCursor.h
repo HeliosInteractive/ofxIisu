@@ -4,9 +4,8 @@
 #include "IisuServer.h"
 #include "IisuEvents.h"
 #include "ofxTweenzor.h" 
-#include "MatrixTransformObject.h"
 
-class DepthCursor : public MatrixTransformObject
+class DepthCursor 
 {
 	public :
 		DepthCursor() {

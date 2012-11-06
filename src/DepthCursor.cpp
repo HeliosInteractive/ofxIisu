@@ -7,7 +7,6 @@ void DepthCursor::setup ( IisuServer * _iisu , int _cursorID , ofColor _color )
 	color = _color ; 
 	cursorID = _cursorID ; 
 	cursorStatus = 0 ; 
-	scale = 1.0f ;
 	position = ofVec2f () ; 
 	
 	ofAddListener( IisuEvents::Instance()->CURSOR_DETECTED , this , &DepthCursor::cursorFoundHandler ) ; 
@@ -48,20 +47,18 @@ void DepthCursor::update( )
 	//A little interpolation goes a long way to make it look smoother
 	Tweenzor::add( &position.x , position.x , desiredLoc.x , 0.0f , 0.12f , EASE_OUT_QUAD ) ; 
 	Tweenzor::add( &position.y , position.y , desiredLoc.y , 0.0f , 0.12f , EASE_OUT_QUAD ) ; 
-
-	x = position.x ; 
-	y = position.y ; 
 }
 
 void DepthCursor::draw ( ) 
 {
 	ofPushStyle() ; 
-		matrixPush() ; 
+	ofPushMatrix() ; 
+		ofTranslate( position.x , position.y ) ; 
 			ofSetColor ( color.r , color.g , color.b ) ;
 			if ( cursorStatus == 0 ) 
 				ofNoFill() ; 
 			ofCircle( 0 , 0, 15 ) ;
-		matrixPop() ;  
+	ofPopMatrix() ; 
 	ofPopStyle() ;
 }
 
@@ -77,17 +74,15 @@ void DepthCursor::debugDraw( )
 void DepthCursor::cursorFoundHandler ( int &args ) 
 {
 	bActive = true ; 
-	Tweenzor::add ( &scale , scale , 1.0f , 0.0f , 0.45f , EASE_OUT_QUAD ) ; 
-	Tweenzor::add ( &rotation , rotation , 0.0f , 0.0f , 0.45f , EASE_OUT_QUAD ) ;
+	cout << "cursor " << cursorID << " found ! " << endl ;
 }
 
 void DepthCursor::cursorLostHandler ( int &args ) 
 {
-	Tweenzor::add ( &scale , scale , 2.0f , 0.1f , 3.0f , EASE_OUT_QUAD ) ;
-	Tweenzor::add ( &rotation , rotation , 1080.0f , 0.1 , 5.0f , EASE_OUT_QUAD ) ; 
+	cout << "cursor " << cursorID << " lost ! " << endl ;
 }
 
 void DepthCursor::cursorDestroyedHandler ( int &args ) 
 {
-	Tweenzor::add ( &scale , scale , 0.01f  , 0.0f , 0.45 ,EASE_OUT_QUAD ) ; 	
+	cout << "cursor " << cursorID << " destroyed ! " << endl ;
 }
