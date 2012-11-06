@@ -75,10 +75,11 @@ class IisuUserRepresentation
 		{
 
 //			getStatusString( iisu->m_pointerStatus ) ; 
-			
+			//cout << "iisu user rep update! " << endl ; 
 			if ( iisu->sceneImageHandle.isValid() == 1 )
 			{
-				//cout << "VALID! " << endl ;
+
+				cout << "VALID! " << endl ;
 				int totalPixels = imageWidth * imageHeight ;
 
 				//Awesomely added by Andy Warner
@@ -277,7 +278,7 @@ class IisuUserRepresentation
 				//ofEnableBlendMode( OF_BLENDMODE_ADD ) ; 
 				ofSetColor( 255 , 255 , 255 ) ; 
 					ofEnableBlendMode( OF_BLENDMODE_ALPHA ) ; 
-						userImage.draw ( x , y , width , height ) ;
+						sceneImage.draw ( x , y , width , height ) ;
 					ofDisableBlendMode( ) ; 
 				ofPopStyle() ;
 
