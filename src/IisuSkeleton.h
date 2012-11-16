@@ -11,6 +11,8 @@ Base
 #include <SDK/iisuSDK.h>
 #include "ofMain.h"
 #include "IisuServer.h"
+#include "IisuUtils.h"
+
 
 class IisuSkeleton
 {
@@ -26,14 +28,35 @@ class IisuSkeleton
 		void setup ( ) ; 
 		void update ( ) ; 
 		void draw ( ) ; 
+		void debugDraw( ) ; 
 
-		bool bTracked ; 
-		bool bDebugRender ; 
+		
+		bool bTracked ;			//If the skeleton is being tracked 
+		bool bDebugRender ;		
 
-		ofRectangle bounds ;
+		//ofRectangle bounds ;
+		
+		ofPoint offset ; 
+		ofPoint scale ; 
 		ofVec3f centroid ; 
 		bool bFlipX , bFlipY ; 
 
-		vector<ofPoint> rawPositions ; 
+		vector<ofPoint> rawPositions ;
 		vector<ofPoint> positions ; 
+		vector<float> jointSizes ; 
+		vector<ofColor> jointColors ; 
+
+		float handAngle ; 
+		float handDistance ; 
+
+		bool bRaisedHand ; 
+		bool bClapped ; 
+
+		bool bSendHandsUp ; 
+		bool bSendHandsDown ; 
+		bool bSendClapIn ;
+		bool bSendClapOut ; 
+
+		float zPlane ; 
+		
 };

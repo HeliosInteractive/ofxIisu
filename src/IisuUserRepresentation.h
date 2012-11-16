@@ -79,7 +79,7 @@ class IisuUserRepresentation
 			if ( iisu->sceneImageHandle.isValid() == 1 )
 			{
 
-				cout << "VALID! " << endl ;
+				//cout << "VALID! " << endl ;
 				int totalPixels = imageWidth * imageHeight ;
 
 				//Awesomely added by Andy Warner
