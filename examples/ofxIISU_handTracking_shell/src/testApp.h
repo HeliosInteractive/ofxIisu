@@ -1,9 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-
 #include "CloseIisuServer.h"
-#include "Tweenzor.h" 
 #include "HandCursor.h"
 
 #ifndef MOUSE_DEBUG

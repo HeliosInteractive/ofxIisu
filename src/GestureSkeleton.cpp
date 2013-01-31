@@ -20,14 +20,23 @@ void GestureSkeleton::setup ( )
 
 	bMultiTouchActive = false ; 
 
-		gestureAngle = 0.0f ;  
-		gestureScale = 1.0f ; 
+	gestureAngle = 0.0f ;  
+	gestureScale = 1.0f ; 
+	XZAngle = 0.0f ; 
+	YZAngle = 0.0f ; 
+
+	yRotation = 0.0f ; 
+	xRotation = 0.0f ;  
+	
+	planeSize = 4000 ; 
+	//slows down the rotation 1 = 1 degree per pixel
+	dampenTime = 0.12f ;
 }
 
 void GestureSkeleton::update ( ) 
 {
 	IisuSkeleton::update( ) ; 
-
+	bool isTracked = iisu->m_skeletonStatus ; 
 	//cout << "gestureSkeleton :: update ! " << endl ;
 	if ( positions.size() > 0 ) //IisuSkeleton::getIsTracked() == true ) //IisuSkeleton::bTracked == true ) 
 	{
@@ -44,7 +53,7 @@ void GestureSkeleton::update ( )
 			{
 				bRaisedHand = true ; 
 				bSendHandsUp = true ; 
-				cout << "Put your fucking hands up! ! " << endl ; 
+				//cout << "HANDS UP ! " << endl ; 
 			}
 		}
 		if ( rightHand.y > collar.y && leftHand.y > collar.y ) 
@@ -53,7 +62,7 @@ void GestureSkeleton::update ( )
 			{
 				bRaisedHand = false; 
 				bSendHandsDown = true ; 
-				cout << "Down to the ground! " << endl ; 
+				//cout << "HANDS DOWN ! " << endl ; 
 			}
 		}
 
@@ -67,7 +76,7 @@ void GestureSkeleton::update ( )
 			{
 				bClapped = true ; 
 				bSendClapIn = true ; 
-				cout << "send a clap IN! " << endl ; 
+				//cout << "send a clap IN! " << endl ; 
 			}
 		}
 
@@ -77,7 +86,7 @@ void GestureSkeleton::update ( )
 			{
 				bClapped = false ; 
 				bSendClapOut = true ; 
-				cout << "send a clap OUT! " << endl ; 
+				//cout << "send a clap OUT! " << endl ; 
 			}
 		}
     
@@ -89,7 +98,6 @@ void GestureSkeleton::update ( )
 		ofPoint multiTouchThreshold = positions[ SK::SkeletonEnum::WAIST ] ; 
 		multiTouchThreshold.z += ( zPlane * scale.z )  ;
 
-		cout << "r.z" << rightHand.z << " , l.z" << leftHand.z << " | z : " << multiTouchThreshold.z << endl ; 
 		if ( rightHand.z < multiTouchThreshold.z && leftHand.z < multiTouchThreshold.z ) 
 		{
 			//Only want to set original values when first crossing the threshold
@@ -102,6 +110,18 @@ void GestureSkeleton::update ( )
 				startDistance = rightHand.distance( leftHand ) ; 
 				startCentroid = ( startRightHand + startLeftHand ) / 2 ;
 				startAngle = handAngle ; 
+
+				startXRot = ofRadToDeg( atan2( rightHand.x - leftHand.x, rightHand.z - leftHand.z ) ) ; 
+				
+				/*
+				if( startXRot > 180.0f ) 
+					startXRot -= 360.0f ; 
+					*/
+				startYRot = ofRadToDeg( atan2( rightHand.y - leftHand.y, rightHand.x - leftHand.x ) ) ;
+
+				startY = ( rightHand.y + leftHand.y ) / 2 ; 
+				//if ( startYRot > 180.0f )   
+				//	startYRot -= 360.0f ; 
 			}
 		}
 		else
@@ -122,17 +142,60 @@ void GestureSkeleton::calcGestureValues ( )
 		ofVec3f leftHand = positions[SK::SkeletonEnum::LEFT_HAND ] ; 
 
 		float dist = rightHand.distance( leftHand ) ;
-        float angle = ofRadToDeg( atan2( rightHand.y - leftHand.y, rightHand.x - leftHand.x ) ) ;
+        float angle = ofRadToDeg( atan2( rightHand.y - leftHand.y, rightHand.x - leftHand.x ) ) ; 
 		ofVec3f centroid = ( rightHand + leftHand ) / 2 ; 
 
 		gestureAngle = angle - startAngle ; 
 		gestureScale = dist / startDistance ;
 		gestureTranslate = centroid - startCentroid ; 
 
-		if ( gestureScale > 2.0f ) 
-			gestureScale = 2.0f ; 
-		if ( gestureScale < 0.35f ) 
-			gestureScale = 0.35f ; 
+		if ( gestureScale > minMaxScale.y ) 
+			gestureScale = minMaxScale.y  ; 
+		if ( gestureScale < minMaxScale.x ) 
+			gestureScale = minMaxScale.x ; 
+
+		//float XZAngle ; 
+		//float YZAngle ;
+
+		XZAngle = ofRadToDeg( atan2( rightHand.x - leftHand.x, rightHand.z - leftHand.z ) )  - 90.0f ; //- startXRot ;
+		YZAngle = ofRadToDeg( atan2( rightHand.y - leftHand.y, rightHand.z - leftHand.z ) ) ; // 90.0f ; // - startYRot ;
+
+		//if ( _xAngle > 180.0f ) 
+		//	_xAngle -= 360.0f ;
+
+		//if ( _yAngle > 180.0f ) 
+		//	_yAngle -= 360.0f ; 
+
+		//yAngle = _yAngle ; //- startYRot ; 
+		//xAngle = _xAngle ; //- startXRot ; 
+
+		yOffset = (( rightHand.y + leftHand.y ) / 2 ) - startY ; 
+		yOffset *= dampenTime ;
+		if ( yOffset < minMaxXRotation.x ) 
+			yOffset = minMaxXRotation.x ; 
+		if ( yOffset > minMaxXRotation.y ) 
+			yOffset = minMaxXRotation.y ; 
+
+		float _newAngle =  ( XZAngle ) ; 
+		if ( _newAngle > maxRotation ) 
+			_newAngle = maxRotation; 
+		if ( _newAngle < -maxRotation ) 
+			_newAngle =- maxRotation; 
+
+		//float rotateSensitivity ;
+		//float maxRotation ; 
+		yRotation += ( _newAngle  ) ; 
+		xRotation = ( YZAngle ) ; 
+		//Tweenzor::add( &xAngle , xAngle , _xAngle , 0.0f , dampenTime, EASE_OUT_QUAD ) ; 
+		//Tweenzor::add( &yAngle , yAngle , _yAngle , 0.0f , dampenTime , EASE_OUT_QUAD ) ; 
+		ofQuaternion xRot( yOffset , ofVec3f(1,0,0));  
+		ofQuaternion yRot( yRotation , ofVec3f(0,1,0));  
+
+		//xRot *
+		curRot =  yRot * xRot  ;  
+
+		lastXZAngle = XZAngle ;
+		lastYZAngle = YZAngle ; 
 }
 
 void GestureSkeleton::draw ( ) 
@@ -145,27 +208,30 @@ void GestureSkeleton::draw ( )
 		ofVec3f rightHand = positions[ SK::SkeletonEnum::RIGHT_HAND ] ; 
 		ofVec3f leftHand = positions[ SK::SkeletonEnum::LEFT_HAND ] ;
 
-		ofSetColor( 0 , 212 , 212 ) ; 
-		ofLine ( rightHand , leftHand ) ; 
 
-		ofPushStyle() ; 
-			ofNoFill() ; 
-			ofSetLineWidth( 3 ) ; 
-			ofPushMatrix() ; 
-				ofTranslate(rightHand ) ; 
-				ofCircle( 0 , 0 , 25 ) ;
-			ofPopMatrix() ; 
+		if ( bMultiTouchActive == true ) 
+		{
+			ofSetColor( 0 , 212 , 212 ) ; 
+			ofLine ( rightHand , leftHand ) ; 
 
-			ofPushMatrix() ; 
-				ofTranslate( leftHand ) ; 
-				ofCircle( 0 , 0 , 25 ) ;
-			ofPopMatrix( ) ; 
+			ofPushStyle() ; 
+				ofNoFill() ; 
+				ofSetLineWidth( 3 ) ; 
+				ofPushMatrix() ; 
+					ofTranslate(rightHand ) ; 
+					ofCircle( 0 , 0 , 25 ) ;
+				ofPopMatrix() ; 
+
+				ofPushMatrix() ; 
+					ofTranslate( leftHand ) ; 
+					ofCircle( 0 , 0 , 25 ) ;
+				ofPopMatrix( ) ; 
 	
-		ofPopStyle() ; 
-
+			ofPopStyle() ; 
+		}
 
 		ofPoint multiTouchThreshold = positions[ SK::SkeletonEnum::WAIST ] ; 
-		multiTouchThreshold.z += ( zPlane * scale.z )  ;
+		multiTouchThreshold.z += ( zPlane * scale.x )  ;
 
 		ofEnableAlphaBlending( ) ; 
 		ofPushMatrix() ; 
@@ -173,18 +239,41 @@ void GestureSkeleton::draw ( )
 			if ( bMultiTouchActive == true ) 
 				ofSetColor( 65 , 255 , 65 , 125 ) ;
 			//cout << "multitTOuchThreshold.z " << multiTouchThreshold.z << " zPlane : " << zPlane << endl ; 
-			ofTranslate( multiTouchThreshold ) ; 
+			//ofTranslate( multiTouchThreshold ) ; 
 
-			ofScale( gestureScale , gestureScale , 1 ) ; 
-			ofRotateZ( gestureAngle ) ; 
-			ofTranslate( gestureTranslate.x , gestureTranslate.y , 0 ) ; 
-			//ofScale( 100.0f , 100.0f , 1.0f ) ; 
+			//ofScale( gestureScale , gestureScale , 1 ) ; 
+			//ofRotateZ( gestureAngle ) ; 
 			ofRect( -planeSize/2 , -planeSize/2 , planeSize , planeSize ) ; 
-		ofPopMatrix() ; 	
+		ofPopMatrix() ; 
+	ofPopStyle( ) ;  
 	}
+}
+
+void GestureSkeleton::applyObjectTransformation( ) 
+{
+	//Extract the rotation from the current rotation
+	ofVec3f axis;  
+	float angle;  
+	curRot.getRotate(angle, axis);  
+	
+	//apply the quaternion's rotation to the viewport and draw the sphere
+	ofRotate(angle, axis.x, axis.y, axis.z);  
+	ofScale( gestureScale , gestureScale , gestureScale ) ; 
 }
 
 void GestureSkeleton::debugDraw( ) 
 {
 	IisuSkeleton::debugDraw( ) ; 
+}
+
+string GestureSkeleton::generateKaonString( ) 
+{
+	//Generate the string to send to KAON !!!!!
+	//Cursor1 [ bool isTrackedWell , float x , float y , float z ] 
+	//Cursor2 [ bool isTrackedWell , float x , float y , float z ] 
+	//Gesture[ bool isActive , float scale, float xAngle , float yAngle , float translateX , float translateY ] 
+	//"gesture([0,0,0,0,0])" 
+
+	string kaonString = "gesture(["+ofToString( bMultiTouchActive )+","+ofToString(gestureScale)+","+ofToString(xRotation)+","+ofToString(yRotation)+","+ofToString(gestureTranslate.x)+","+ofToString(gestureTranslate.y)+"])" ; 
+	return kaonString ; 
 }

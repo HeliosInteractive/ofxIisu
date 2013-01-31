@@ -2,7 +2,6 @@
 
 #include "ofMain.h"
 #include "IisuSkeleton.h"
-
 /* Doing some things with multitouch and I wanted to keep it seperate from the basic core skeleton */
 
 class GestureSkeleton : public IisuSkeleton
@@ -15,7 +14,6 @@ class GestureSkeleton : public IisuSkeleton
 		virtual void update ( ) ; 
 		virtual void draw ( ) ; 
 		virtual void debugDraw( ) ;  
-
 
 		bool bMultiTouchActive ; 
 		ofPoint startRightHand ; 
@@ -43,4 +41,36 @@ class GestureSkeleton : public IisuSkeleton
 
 		float planeSize ;		//Debug size of the plane
 		float zPlane ;			//Threshold for multitouch gestures
+
+		//current state of the rotation  
+		ofQuaternion curRot;  
+		float XZAngle ; 
+		float YZAngle ;
+
+		float lastXZAngle ; 
+		float lastYZAngle ;
+		
+		float yRotation ; 
+		float xRotation ; 
+
+		float startY ; 
+		float yOffset ; 
+
+		ofVec2f minMaxScale ;
+		ofVec2f minMaxXRotation ; 
+		
+		void applyObjectTransformation() ; 
+
+		float startXRot ; 
+		float startYRot ; 
+	
+		float dampenTime ; 
+		float maxRotation ; 
+
+		string generateKaonString() ; 
+		bool getIsTracked( ) { return IisuSkeleton::getIsTracked() ; } 
+
+
+		
+
 };

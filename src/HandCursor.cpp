@@ -1,5 +1,4 @@
 #include "HandCursor.h"
-#include "ofxTweenzor.h"
 
 void HandCursor::setup( ) 
 {
@@ -22,6 +21,7 @@ void HandCursor::setup( )
 	bOpen = false ; 
 	openAmount = 1.0f ; 
 	zFactor = 500.0f ; 
+	handOpenThreshold = 0.2f ; 
 }
 
 void HandCursor::update ( ) 
@@ -45,7 +45,7 @@ void HandCursor::updateIisu ( )
 	if ( iisu->m_hand1_status > 0 ) 
 	{
 		bool lastOpen = bOpen ; 
-		bOpen = ( openAmount > .2f ) ; //iisu->m_hand1_open ; 
+		bOpen = ( openAmount > handOpenThreshold ) ;
 
 		//change in openness !
 		if ( bOpen != lastOpen )
@@ -61,7 +61,8 @@ void HandCursor::updateIisu ( )
 			}
 		}
 
-		Tweenzor::add( &openAmount , openAmount ,iisu->m_hand1_openAmount  , 0.0f , 0.001f , EASE_OUT_QUAD ) ; 
+		//Interpolate it just a little bit
+		openAmount = ofLerp( openAmount , iisu->m_hand1_openAmount , 0.5f ) ; 
 
 		//openAmount = iisu->m_hand1_openAmount ; 
 		ofVec3f _fingerCentroid = ofVec3f() ; 
@@ -89,9 +90,7 @@ void HandCursor::updateIisu ( )
 
 
 		//cout << "Normalized : " << normalized.x << " , " << normalized.y << endl ; 
-		Tweenzor::add ( &palmPosition.x , palmPosition.x , desiredLoc.x , 0.0f , 0.2f , EASE_OUT_QUAD ) ; 
-		Tweenzor::add ( &palmPosition.y , palmPosition.y , desiredLoc.y , 0.0f , 0.2f , EASE_OUT_QUAD ) ; 
-		Tweenzor::add ( &palmPosition.z , palmPosition.z , desiredLoc.z , 0.0f , 0.2f , EASE_OUT_QUAD ) ; 
+		palmPosition = palmPosition.interpolate( desiredLoc , 0.5f ) ; 
 
 		//vector<Finger*>::iterator finger ; 
 		/*

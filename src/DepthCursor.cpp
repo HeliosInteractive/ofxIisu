@@ -45,8 +45,7 @@ void DepthCursor::update( )
 		desiredLoc.y = maxY ; 
 
 	//A little interpolation goes a long way to make it look smoother
-	Tweenzor::add( &position.x , position.x , desiredLoc.x , 0.0f , 0.12f , EASE_OUT_QUAD ) ; 
-	Tweenzor::add( &position.y , position.y , desiredLoc.y , 0.0f , 0.12f , EASE_OUT_QUAD ) ; 
+	position = position.interpolate( desiredLoc , 0.5 ) ; 
 }
 
 void DepthCursor::draw ( ) 

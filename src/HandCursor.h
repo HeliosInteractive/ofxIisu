@@ -2,8 +2,6 @@
 
 #include "ofMain.h"
 #include "CloseIisuServer.h"
-#include "Tweenzor.h"
-#include "HeliosDebug.h"
 //#define MOUSE_DEBUG 1
 
 class HandCursor
@@ -40,4 +38,5 @@ class HandCursor
 
 		bool bOpen ; 
 		float openAmount ; 
+		float handOpenThreshold ; 
 };

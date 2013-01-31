@@ -30,5 +30,5 @@ class IisuUtils
 		ofVec3f iisuPointToOF( Vector3 point , ofVec3f range ) ; 
 		ofVec3f IIsuPosition3DToOfxScreen( Vector3 IisuPosition , ofPoint scale , bool mirrorX = false , bool mirrorY = false ) ; 
 		ofVec3f IIsuPosition3DToOfxScreen( Vector3 IisuPosition , ofRectangle bounds , bool mirrorX = false , bool mirrorY = false ) ; 
-
+		ofPoint VectorToPoint( Vector3 v ) { return ofPoint ( v.x , v.z , v.y ) ; } 
 };

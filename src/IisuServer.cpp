@@ -49,16 +49,11 @@ void IisuServer::setup()
 		getchar();
 		exit(0);
 	}
-
 	// get the device
 	m_device = retDevice.get();
 
 	registerEvents() ; 
 	//initIisu() ; 
-
-
-	
-
 	m_skeletonStatus = 0 ; 
 }
 
@@ -76,9 +71,15 @@ int IisuServer::addController( )
 	pointerNormalizedCoordinatesData.push_back( m_device->registerDataHandle<Vector3>( normalizedString.c_str() ) );
 	pointerNormalizedCoordinates.push_back( Vector3( ) ) ; 
 
+	//UI.CONTROLLER#.POINTER.WorldCoordinates
 	string statusString = pointerString + ".POINTER.Status" ; 
 	pointerStatusData.push_back( m_device->registerDataHandle<int32_t>(statusString.c_str() ) );
 	pointerStatus.push_back( 0 ) ;
+
+
+	string globalString = pointerString + ".POINTER.WorldCoordinates" ; 
+	pointerGlobalCoordinatesData.push_back( m_device->registerDataHandle<Vector3>( globalString.c_str() ) ); 
+	pointerGlobalCoordinates.push_back( Vector3() ) ; 
 
 	return ( iisuIndex - 1 ) ; 
 	
@@ -207,6 +208,7 @@ void IisuServer::onDataFrame(const DataFrameEvent& event)
 		pointerStatus[ i ]  = pointerStatusData[ i ].get() ; 
 		pointerNormalizedCoordinates[ i ] = pointerNormalizedCoordinatesData[ i ].get() ; 
 		controllerIsActive[ i ] = controllerIsActiveData[ i ].get( ) ; 
+		pointerGlobalCoordinates[ i ] = pointerGlobalCoordinatesData[ i ].get() ; 
 	}
 
 	/*
@@ -326,7 +328,12 @@ Vector3 IisuServer::getNormalizedCursorCoordinates ( int cursorID )
 
 Vector3 IisuServer::getWorldCursorPosition( int cursorID ) 
 {
-	return Vector3() ; 
+	if ( cursorID < pointerStatus.size() ) 
+		return pointerGlobalCoordinates[ cursorID ] ;
+	else
+		cout << "IisuServer::getNormalizedCursorCoordinates :: INVALID INDEX" << endl ;
+
+	return Vector3( ) ; 
 }
 
 void IisuServer::exit ( int exitCode ) 

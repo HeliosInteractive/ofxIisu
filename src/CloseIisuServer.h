@@ -84,7 +84,7 @@ class CloseIisuServer
 				if ( desiredLoc.y < 0 ) 
 					desiredLoc.y = 0 ; 
 				if ( desiredLoc.y > ofGetHeight() ) 
-					desiredLoc = ofGetHeight() ; 
+					desiredLoc.y = ofGetHeight() ; 
 			}
 
 			return desiredLoc ; 

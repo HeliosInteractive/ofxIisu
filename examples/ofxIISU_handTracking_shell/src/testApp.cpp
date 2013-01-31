@@ -10,7 +10,6 @@ void testApp::setup(){
 	iisuServer.setup() ; 
 #endif
 
-	Tweenzor::init() ; 
 	ofSetVerticalSync( true ) ; 
 	ofSetFrameRate( 60 ) ; 
 
@@ -26,7 +25,6 @@ void testApp::setup(){
 //--------------------------------------------------------------
 void testApp::update(){
 
-	Tweenzor::update( ofGetElapsedTimeMillis() ) ; 
 	hand.updateIisu( ) ;
 }
 

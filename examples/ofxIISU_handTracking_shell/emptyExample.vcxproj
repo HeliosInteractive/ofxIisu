@@ -57,7 +57,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>..\..\..\addons\ofxTweenzor\src;..\..\..\helios_addons\ofxIisu\src;..\..\..\helios_addons\ofxIisu\iisu\Dependencies;..\..\..\helios_addons\ofxIisu\iisu\include;..\..\..\helios_addons\Debug;..\..\..\helios_addons\ofxIisu\iisu;%(AdditionalIncludeDirectories);src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\addons\ofxIisu\src;..\..\..\addons\ofxIisu\iisu\include;..\..\..\addons\ofxIisu\iisu;%(AdditionalIncludeDirectories);src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
@@ -68,7 +68,7 @@
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
       <AdditionalDependencies>iisuSDK.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(IISU_SDK_DIR)\lib;..\..\..\helios_addons\\ofxIisu\iisu\Dependencies\lib;..\..\..\helios_addons\ofxIisu\iisu\Framework\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(IISU_SDK_DIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent />
   </ItemDefinitionGroup>
@@ -98,29 +98,30 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\addons\ofxTweenzor\src\Tween.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxTweenzor\src\Tweenzor.cpp" />
-    <ClCompile Include="..\..\..\helios_addons\ofxIisu\src\CloseIisuServer.cpp" />
-    <ClCompile Include="..\..\..\helios_addons\ofxIisu\src\HandCursor.cpp" />
-    <ClCompile Include="..\..\..\helios_addons\ofxIisu\src\IisuServer.cpp" />
+    <ClCompile Include="..\src\CloseIisuServer.cpp" />
+    <ClCompile Include="..\src\CursorGestureHub.cpp" />
+    <ClCompile Include="..\src\DepthCursor.cpp" />
+    <ClCompile Include="..\src\GestureSkeleton.cpp" />
+    <ClCompile Include="..\src\HandCursor.cpp" />
+    <ClCompile Include="..\src\IisuServer.cpp" />
+    <ClCompile Include="..\src\IisuSkeleton.cpp" />
+    <ClCompile Include="..\src\IisuUtils.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\testApp.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\addons\ofxTweenzor\src\ofxTweenzor.h" />
-    <ClInclude Include="..\..\..\addons\ofxTweenzor\src\Tween.h" />
-    <ClInclude Include="..\..\..\addons\ofxTweenzor\src\TweenEvent.h" />
-    <ClInclude Include="..\..\..\addons\ofxTweenzor\src\TweenFunctions.h" />
-    <ClInclude Include="..\..\..\addons\ofxTweenzor\src\TweenSelector.h" />
-    <ClInclude Include="..\..\..\addons\ofxTweenzor\src\Tweenzor.h" />
-    <ClInclude Include="..\..\..\helios_addons\Debug\HeliosDebug.h" />
-    <ClInclude Include="..\..\..\helios_addons\ofxIisu\src\CloseIisuServer.h" />
-    <ClInclude Include="..\..\..\helios_addons\ofxIisu\src\DepthCursor.h" />
-    <ClInclude Include="..\..\..\helios_addons\ofxIisu\src\HandCursor.h" />
-    <ClInclude Include="..\..\..\helios_addons\ofxIisu\src\IisuEventArgs.h" />
-    <ClInclude Include="..\..\..\helios_addons\ofxIisu\src\IisuEvents.h" />
-    <ClInclude Include="..\..\..\helios_addons\ofxIisu\src\IisuServer.h" />
-    <ClInclude Include="..\..\..\helios_addons\ofxIisu\src\ofxIisu.h" />
+    <ClInclude Include="..\src\CloseIisuServer.h" />
+    <ClInclude Include="..\src\CursorGestureHub.h" />
+    <ClInclude Include="..\src\DepthCursor.h" />
+    <ClInclude Include="..\src\GestureSkeleton.h" />
+    <ClInclude Include="..\src\HandCursor.h" />
+    <ClInclude Include="..\src\IisuEventArgs.h" />
+    <ClInclude Include="..\src\IisuEvents.h" />
+    <ClInclude Include="..\src\IisuServer.h" />
+    <ClInclude Include="..\src\IisuSkeleton.h" />
+    <ClInclude Include="..\src\IisuUserRepresentation.h" />
+    <ClInclude Include="..\src\IisuUtils.h" />
+    <ClInclude Include="..\src\ofxIisu.h" />
     <ClInclude Include="src\testApp.h" />
   </ItemGroup>
   <ItemGroup>

@@ -3,7 +3,6 @@
 #include "ofMain.h" 
 #include "IisuServer.h"
 #include "IisuEvents.h"
-#include "ofxTweenzor.h" 
 
 class DepthCursor 
 {

@@ -13,6 +13,7 @@ using namespace SK;
 using namespace std;
 
 #include "ofMain.h" 
+#include "IisuUtils.h"
 #include "IisuEvents.h" 
 
 class IisuServer 
@@ -38,6 +39,7 @@ class IisuServer
 		vector<DataHandle<bool>>				controllerIsActiveData ; 
 		vector<DataHandle<SK::Vector3>>			pointerNormalizedCoordinatesData ; 
 		vector<DataHandle<int32_t>>				pointerStatusData ; 
+		vector<DataHandle<SK::Vector3>>			pointerGlobalCoordinatesData ; 
 		
 		//Camera
 		DataHandle< SK::Image >					sceneImageHandle ;
@@ -62,6 +64,7 @@ class IisuServer
 		vector<bool>							controllerIsActive ; 
 		vector<int32_t>							pointerStatus ; 
 		vector<Vector3>							pointerNormalizedCoordinates ; 
+		vector<Vector3>							pointerGlobalCoordinates ; 
 	
 		//Skeleton + Volume
 		int32_t									m_skeletonStatus ; 
@@ -76,7 +79,6 @@ class IisuServer
 		SK::Image								sceneImage ; 
 	
 	
-
 		// events callbacks
 		void onError(const ErrorEvent& event);
 		void onDataFrame(const DataFrameEvent& event)	; 

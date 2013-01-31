@@ -1,6 +1,4 @@
 #include "IisuSkeleton.h"
-#include "Tweenzor.h"
-
 void IisuSkeleton::setup ( )
 {
 	bTracked  = false ;  
@@ -21,8 +19,8 @@ void IisuSkeleton::setup ( )
 
 void IisuSkeleton::update ( ) 
 {
-	bool isTracked = iisu->m_skeletonStatus ; 
-	if ( isTracked != 0 ) 
+	bTracked = iisu->m_skeletonStatus ; 
+	if ( bTracked != 0 ) 
 	{		
 		SK::Array<SK::Vector3> keyPoints = iisu->m_keyPoints ; 		
 		SK::Array<float> keyPointsConfidence = iisu->m_keyPointsConfidence ; 
@@ -39,7 +37,8 @@ void IisuSkeleton::update ( )
 			keyP.x += offset.x ; 
 			keyP.y += offset.z ; 
 			keyP.z += offset.y ; 
-			ofVec3f p = IisuUtils::Instance()->IIsuPosition3DToOfxScreen( keyP , scale , bFlipX , bFlipY ) ; 
+			ofVec3f _scale = ofVec3f( scale.x , scale.x , scale.x ) ; 
+			ofVec3f p = IisuUtils::Instance()->IIsuPosition3DToOfxScreen( keyP , _scale , bFlipX , bFlipY ) ; 
 			positions.push_back( p ) ; 
 		}
 
@@ -54,9 +53,9 @@ void IisuSkeleton::update ( )
 void IisuSkeleton::draw ( ) 
 {
 
-	bool isTracked = iisu->m_skeletonStatus ; 
+	//bool isTracked = iisu->m_skeletonStatus ; 
 
-	if ( isTracked != 0 ) 
+	if ( bTracked != false ) 
 	{		
 		ofSetColor ( ofColor::red ) ; 
 		for ( int i = 0 ; i < positions.size() ; i++ ) 
@@ -77,7 +76,7 @@ void IisuSkeleton::debugDraw( )
 	{
 		ofVec3f rightHand = positions[SK::SkeletonEnum::RIGHT_WRIST ] ; 
 		ofVec3f leftHand = positions[SK::SkeletonEnum::LEFT_WRIST ] ;
-		string status = " x :" + ofToString ( rightHand.x ) + ",y:"+ofToString( rightHand.y) +",z:"+ofToString(rightHand.z ) ; 
-		ofDrawBitmapStringHighlight( status , 15 , ofGetHeight() - 60 ) ; 
+		//string status = " x :" + ofToString ( rightHand.x ) + ",y:"+ofToString( rightHand.y) +",z:"+ofToString(rightHand.z ) ; 
+		//ofDrawBitmapStringHighlight( status , 15 , ofGetHeight() - 60 ) ; 
 	}
 }
