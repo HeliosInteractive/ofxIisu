@@ -23,6 +23,7 @@ class HandCursor : public DepthCursor
 		int activeFingers ; 
 		float palmWeighting ;
 
+
 		bool bOpen ; 
 		float openAmount ; 
 		float handOpenThreshold ; 

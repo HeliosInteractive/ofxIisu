@@ -17,14 +17,6 @@ void DepthCursor::setup ( IisuServer * _iisu , int _cursorID , ofColor _color )
 
 void DepthCursor::update( ) 
 {
-	//update IISU
-	if ( iisu->m_device==NULL || iisu->m_iisuHandle==NULL )
-	{
-		//IISU is broken !
-		cout << "IISU IS BROKEN !" << endl ; 
-		return ;
-	}		
-
 	cursorStatus = iisu->getCursorStatus( cursorID ) ; 
 
 	//Calculate the palm position

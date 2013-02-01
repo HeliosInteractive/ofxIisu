@@ -23,12 +23,11 @@ class testApp : public ofBaseApp{
 		void exit();
 		void exitEventHandler ( int &exitCode ) ; 
 
-#ifndef MOUSE_DEBUG
 		IisuServer iisuServer ; 
-#endif
 		
 		HandCursor hand ; 
-		//IisuUserRepresentation iisuUserRep ;
+		
+		bool bEnableDebug ; 
 
 
 };

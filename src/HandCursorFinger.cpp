@@ -11,7 +11,7 @@ void HandCursorFinger::setup ( int _id , float _radius , ofColor _color )
 
 void HandCursorFinger::update ( ) 
 {
-
+	
 }
 
 void HandCursorFinger::draw ( ) 
@@ -21,5 +21,15 @@ void HandCursorFinger::draw ( )
 		ofEnableSmoothing( ) ; 
 		ofSetColor ( color ) ; 
 		ofCircle( position , radius ) ; 
+	}
+}
+
+void HandCursorFinger::debugDraw( ) 
+{
+	if ( status > 0 ) 
+	{
+		string status = "# " + ofToString( id ) ; 
+		//cout << "deubgDraw @ " << position << endl ; 
+		ofDrawBitmapStringHighlight( status , position.x , position.y +- radius * 2.0f ) ; 
 	}
 }

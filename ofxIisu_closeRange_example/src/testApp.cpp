@@ -3,12 +3,10 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 
-#ifndef MOUSE_DEBUG
 	ofAddListener ( IisuEvents::Instance()->exitApplication , this , &testApp::exitEventHandler ) ; 
 
 	iisuServer = IisuServer() ; 
 	iisuServer.setup( true ) ; 
-#endif
 
 	ofSetVerticalSync( true ) ; 
 	ofSetFrameRate( 60 ) ; 
@@ -16,18 +14,22 @@ void testApp::setup(){
 	hand = HandCursor() ; 
 	hand.setup( &iisuServer , 0 , ofColor::fromHsb( ofRandom( 255 ) , 255 , 255 ) ) ; 
 
-#ifndef MOUSE_DEBUG
 	hand.iisu = &iisuServer ; 
-#endif 
-
-	//iisuUserRep.setup( &iisuServer ) ; 
+	bEnableDebug = false ; 
 
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
 
+	if ( iisuServer.m_device==NULL || iisuServer.m_iisuHandle==NULL)
+	{
+		cout << "Iisu is not initialized !!" <<endl;
+		return ; 
+	}
+
 	hand.update( ) ;
+	ofSetWindowTitle( "ofxIisu CloseRange Example - fps - " + ofToString( ofGetFrameRate() ) ) ; 
 	//iisuUserRep.update( ) ; 
 }
 
@@ -35,12 +37,24 @@ void testApp::update(){
 void testApp::draw(){
 
 	hand.draw( ) ; 
-	//iisuUserRep.draw( 15 , 15 , 160 , 120 ) ;
+	if ( bEnableDebug == true ) 
+		hand.debugDraw() ; 
+
+	string debugCTA = "hit D to toggle debug drawing" ; 
+	ofDrawBitmapStringHighlight ( debugCTA , 25 , ofGetHeight() - 45 ) ; 
 }
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
 
+	switch ( key ) 
+	{
+		case 'd':
+		case 'D':
+			bEnableDebug = !bEnableDebug ; 
+			cout << "bDebugEnabled is now : " << bEnableDebug << endl ; 
+			break ;
+	}
 }
 
 //--------------------------------------------------------------
@@ -91,32 +105,30 @@ void testApp::exitEventHandler ( int &exitCode )
 
 void testApp::exit( ) 
 {
-	#ifndef MOUSE_DEBUG
-		cout << "testApp::exit" << endl ; 
-		// if we have iisu device
-		if ( iisuServer.m_device )
-		{
-			// clear the device pointer
-			iisuServer.m_device = NULL;
-		}
+	cout << "testApp::exit" << endl ; 
+	// if we have iisu device
+	if ( iisuServer.m_device )
+	{
+		// clear the device pointer
+		iisuServer.m_device = NULL;
+	}
 
-		// if we have iisu handle
-		if ( iisuServer.m_iisuHandle )
+	// if we have iisu handle
+	if ( iisuServer.m_iisuHandle )
+	{
+		// destroy the iisu handle
+		SK::Result res = Context::Instance().destroyHandle( *iisuServer.m_iisuHandle );
+		if(res.failed())
 		{
-			// destroy the iisu handle
-			SK::Result res = Context::Instance().destroyHandle( *iisuServer.m_iisuHandle );
-			if(res.failed())
-			{
-				cerr << "Failed to destroy handle!" << endl
-					<< "Error " << res.getErrorCode() << ": " << res.getDescription().ptr() << endl;
-				getchar();
-			}
-			// cleat the iisu handle
-			iisuServer.m_iisuHandle = NULL;
+			cout << "Failed to destroy handle!" << endl
+				<< "Error " << res.getErrorCode() << ": " << res.getDescription().ptr() << endl;
 		}
+		// cleat the iisu handle
+		iisuServer.m_iisuHandle = NULL;
+	}
 
-		// finalize context
-		Context::Instance().finalize();
-		ofSleepMillis( 5000 ) ; 
-	#endif
+	// finalize context
+	Context::Instance().finalize();
+	//Leave the final readout on for 10 seconds in case there's an error
+	ofSleepMillis( 10000 ) ; 
 }

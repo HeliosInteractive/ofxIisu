@@ -251,23 +251,7 @@ void IisuServer::onDataFrame(const DataFrameEvent& event)
 			m_hand1_openAmount = m_hand1_openAmountHandle.get() ; 
 		}
 	}
-	/*
-	//UI + Controller
-	m_controllerIsActive_0 = m_controllerIsActiveData_0.get();
-	m_pointerStatus_0 = m_pointerStatusData_0.get();
-	m_pointerStatus_1 = m_pointerStatusData_1.get();
-
-	// if pointer is detected we can read it's coordinates
-	if ( m_pointerStatus_0 != POINTER_STATUS_NOT_DETECTED )
-	{
-		m_pointerNormalizedCoordinates_0 = m_pointerNormalizedCoordinatesData_0.get() ; 
-	}
-
-	if ( m_pointerStatus_1 != POINTER_STATUS_NOT_DETECTED ) 
-	{
-		m_pointerNormalizedCoordinates_1 = m_pointerNormalizedCoordinatesData_1.get() ; 
-	}*/
-
+	
 	//Skeleton + Volume
 	m_centroidCount = m_centroidCountParameter.get() ; 
 	m_centroidPositions = m_centroidPositionsData.get() ; 
@@ -325,6 +309,7 @@ void IisuServer::registerEvents ( )
 
 	/*
 	// users activation events 
+	ret = m_iisuHandle->getEventManager().registerEventListener("UM.UserActivated", *this, &IisuServer::onUserActivation);
 	if (ret.failed()) 
 	{
 		cerr << "Failed to register for user activation events!" << endl
@@ -343,6 +328,7 @@ void IisuServer::registerEvents ( )
 		exit();
 	}
 	*/
+	
 }
 
 int IisuServer::getCursorStatus ( int cursorID ) 
@@ -385,30 +371,3 @@ void IisuServer::exit ( int exitCode )
 
 	ofNotifyEvent( IisuEvents::Instance()->exitApplication , exitCode , this ) ; 
 }
-
-/*
-ofVec3f IisuServer::iisuPointToOF( Vector3 point )
-{
-	ofVec3f vector = ofVec3f( (( point.x +1.0f )/2.0f ) * ofGetWidth() ,ofGetHeight() +- ( ( point.z +1.0f ) /2.0f ) * ofGetHeight() ,  point.y ) ; 
-	return vector ; 
-}
-
-ofVec3f IisuServer::iisuPointToOF( Vector3 point , ofVec3f range ) 
-{
-	ofVec3f vector = ofVec3f( (( point.x +1.0f )/2.0f ) * range.x , ( ( point.z +1.0f ) /2.0f ) * range.y ,  point.y * range.z ) ; 
-	return vector ; 
-}
-
-ofVec3f IisuServer::IIsuPosition3DToOfxScreen( Vector3 IisuPosition , ofRectangle bounds , bool mirrorX , bool mirrorY )
-{
-	ofVec3f screenPosition ; 
-	float factorX = ( mirrorX == true ) ? -2 : 2 ; 
-	float factorY = ( mirrorY == true ) ? -2 : 2 ; 
-		
-	screenPosition.x = bounds.x + ( ( ( IisuPosition.x + 1 ) / factorX ) * bounds.width );
-	screenPosition.y = bounds.y + ( bounds.height -( ( IisuPosition.z + 1 ) / factorY ) * bounds.height ) ; 
-	screenPosition.z = IisuPosition.y; 
-		
-	return screenPosition ;
-}
-*/

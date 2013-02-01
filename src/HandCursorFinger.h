@@ -12,6 +12,7 @@ public :
 	void setup ( int _id , float _radius , ofColor _color ) ; 
 	void update ( ) ; 
 	void draw ( ) ; 
+	void debugDraw( ) ; 
 
 
 	int id ; 
