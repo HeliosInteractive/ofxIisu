@@ -68,7 +68,9 @@ void HandCursor::updateIisu ( )
 		ofVec3f _fingerCentroid = ofVec3f() ; 
 		bTracked = true ; 
 		//Calculate the palm position
-		ofVec3f desiredLoc = iisu->Iisu3DtoStage( iisu->m_hand1_palmPosition , 0.25 , true , true ) ; 
+		
+		ofVec3f desiredLoc = IisuUtils::Instance()->IIsuPosition3DToOfxScreen( iisu->m_hand1_palmPosition , 0.25 , true , true ) ; 
+		//ofVec3f desiredLoc =IisuUtils::Instance()->IIsuPosition3DToOfxScreen( iisu->m_hand1_palmPosition , 0.25 , true , true ) ; 
 
 		//Normalized : 
 		ofVec3f normalized = desiredLoc ; 

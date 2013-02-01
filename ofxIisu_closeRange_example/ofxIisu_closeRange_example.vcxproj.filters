@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup>
+		<ClCompile Include="src\testApp.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\main.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxIisu\src\CloseIisuServer.cpp">
+			<Filter>addons\ofxIisu\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxIisu\src\CursorGestureHub.cpp">
+			<Filter>addons\ofxIisu\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxIisu\src\DepthCursor.cpp">
+			<Filter>addons\ofxIisu\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxIisu\src\GestureSkeleton.cpp">
+			<Filter>addons\ofxIisu\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxIisu\src\HandCursor.cpp">
+			<Filter>addons\ofxIisu\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxIisu\src\IisuServer.cpp">
+			<Filter>addons\ofxIisu\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxIisu\src\IisuSkeleton.cpp">
+			<Filter>addons\ofxIisu\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxIisu\src\IisuUtils.cpp">
+			<Filter>addons\ofxIisu\src</Filter>
+		</ClCompile>
+	</ItemGroup>
+	<ItemGroup>
+		<Filter Include="src">
+			<UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons">
+			<UniqueIdentifier>{71834f65-f3a9-211e-73b8-dc8563776aec}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxIisu">
+			<UniqueIdentifier>{edc8e385-fc28-3684-b54d-cb5c30f12ff2}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxIisu\src">
+			<UniqueIdentifier>{a6d0e50e-612d-7669-e1a6-f6596bad633b}</UniqueIdentifier>
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="src\testApp.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxIisu\src\CloseIisuServer.h">
+			<Filter>addons\ofxIisu\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxIisu\src\CursorGestureHub.h">
+			<Filter>addons\ofxIisu\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxIisu\src\DepthCursor.h">
+			<Filter>addons\ofxIisu\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxIisu\src\GestureSkeleton.h">
+			<Filter>addons\ofxIisu\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxIisu\src\HandCursor.h">
+			<Filter>addons\ofxIisu\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxIisu\src\IisuEventArgs.h">
+			<Filter>addons\ofxIisu\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxIisu\src\IisuEvents.h">
+			<Filter>addons\ofxIisu\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxIisu\src\IisuServer.h">
+			<Filter>addons\ofxIisu\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxIisu\src\IisuSkeleton.h">
+			<Filter>addons\ofxIisu\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxIisu\src\IisuUserRepresentation.h">
+			<Filter>addons\ofxIisu\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxIisu\src\IisuUtils.h">
+			<Filter>addons\ofxIisu\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxIisu\src\ofxIisu.h">
+			<Filter>addons\ofxIisu\src</Filter>
+		</ClInclude>
+	</ItemGroup>
+</Project>

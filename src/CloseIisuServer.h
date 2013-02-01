@@ -89,31 +89,6 @@ class CloseIisuServer
 
 			return desiredLoc ; 
 		}
-
-		/*
-		public static function IIsuPosition3DToScreenPosition(IisuPosition:CIisuVector3,MainStage:Stage):CIisuVector3
-		{
-			var _ScreenPosition:CIisuVector3;
-			_ScreenPosition = new CIisuVector3();
-			
-			_ScreenPosition.x = ( ( IisuPosition.x + 1 ) / 2 ) * MainStage.stageWidth ;
-			_ScreenPosition.y = MainStage.stageHeight -( ( IisuPosition.z + 1 ) / 2 ) * MainStage.stageHeight ; 
-			_ScreenPosition.z = IisuPosition.y; 
-			
-			return _ScreenPosition;
-		}
-		//////////////////////////////////////////////////////////////////////////
-		public static function IIsuPosition2DToScreenPosition(IisuPosition:CIisuVector2,MainStage:Stage):CIisuVector2
-		{
-			var _ScreenPosition:CIisuVector2;
-			_ScreenPosition = new CIisuVector2();
-			
-			_ScreenPosition.x = ( ( IisuPosition.x + 1 ) / 2 ) * MainStage.stageWidth ;
-			_ScreenPosition.y = MainStage.stageHeight -( ( IisuPosition.y + 1 ) / 2 ) * MainStage.stageHeight ; 
-			
-			return _ScreenPosition;
-		}*/
-
 };
 
 

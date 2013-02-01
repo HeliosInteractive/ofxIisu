@@ -145,7 +145,6 @@ void CloseIisuServer::onDataFrame(const DataFrameEvent& event)
 	else
 	{
 		//cout << "frame# " << currentFrameID << endl ; 
-
 	}
 	
 	m_hand1_status = m_hand1_statusHandle.get( ) ; 
@@ -157,6 +156,7 @@ void CloseIisuServer::onDataFrame(const DataFrameEvent& event)
 		m_hand1_open = m_hand1_openHandle.get() ; 
 		m_hand1_openAmount = m_hand1_openAmountHandle.get() ; 
 	}
+
 	// remember current frame id
 	m_lastFrameID = currentFrameID;
 

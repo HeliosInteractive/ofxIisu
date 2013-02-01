@@ -9,8 +9,9 @@ enum POINTER_STATUS
 };
 
 
-void IisuServer::setup() 
+void IisuServer::setup( bool _bCloseInteraction ) 
 {
+	bCloseInteraction = _bCloseInteraction ; 
 	// We need to specify where is located the iisu dll and it's configuration file.
 	// in this sample we'll use the SDK's environment variable.
 	string dllLocation = getenv("IISU_SDK_DIR") ;
@@ -53,7 +54,7 @@ void IisuServer::setup()
 	m_device = retDevice.get();
 
 	registerEvents() ; 
-	//initIisu() ; 
+	initIisu() ; 
 	m_skeletonStatus = 0 ; 
 }
 
@@ -90,15 +91,6 @@ void IisuServer::initIisu()
 	m_user1SceneID = m_device->registerDataHandle<int32_t>("USER1.SceneObjectID") ; 
 	m_userIsActiveData = m_device->registerDataHandle<bool>("USER.IsActive") ; 
 
-	/*
-	//Controller UI
-	m_controllerIsActiveData_0 = m_device->registerDataHandle<bool>("UI.CONTROLLER1.IsActive");
-	m_pointerNormalizedCoordinatesData_0 = m_device->registerDataHandle<Vector3>("UI.CONTROLLER1.POINTER.NormalizedCoordinates");
-	m_pointerStatusData_0 = m_device->registerDataHandle<int32_t>("UI.CONTROLLER1.POINTER.Status");
-	m_controllerIsActiveData_1 = m_device->registerDataHandle<bool>("UI.CONTROLLER2.IsActive");
-	m_pointerNormalizedCoordinatesData_1 = m_device->registerDataHandle<Vector3>("UI.CONTROLLER2.POINTER.NormalizedCoordinates");
-	m_pointerStatusData_1 = m_device->registerDataHandle<int32_t>("UI.CONTROLLER2.POINTER.Status");
-	*/
 	//Volume + Skeleton
 	m_skeletonStatusData = m_device->registerDataHandle<int>("USER1.SKELETON.Status");
 	m_keyPointsData = m_device->registerDataHandle<Array<Vector3> >("USER1.SKELETON.KeyPoints");
@@ -113,7 +105,32 @@ void IisuServer::initIisu()
 
 	m_centroidCountParameter.set( 150 ) ; 
 
+
 	
+	cout << "IS close interaction enabled ? " << m_CI_Enabled << endl ;
+
+	if ( bCloseInteraction == true ) 
+	{
+		m_CI_EnabledHandle = m_device->registerParameterHandle<bool>("CI.Enabled") ; 
+		m_hand1_statusHandle = m_device->registerDataHandle<int32_t>("CI.HAND1.Status") ; 
+		m_hand1_palmPositionHandle = m_device->registerDataHandle<Vector3>("CI.HAND1.PalmPosition3D" ) ; 
+		m_hand1_fingerTipsHandle = m_device->registerDataHandle<SK::Array<Vector3>>("CI.HAND1.FingerTipPositions3D" ) ; 
+		m_hand1_fingerTipsStatusHandle = m_device->registerDataHandle<SK::Array<int32_t>>("CI.HAND1.FingerStatus" ) ; 
+
+		m_hand1_openHandle = m_device->registerDataHandle<bool>("CI.HAND1.IsOpen" ) ; 
+		m_hand1_openAmountHandle = m_device->registerDataHandle<float>("CI.HAND1.Openness" ) ; 
+		Result res = m_device->getEventManager().registerEventListener( "CI.HandActivated" , *this , &CloseIisuServer::handActivatedHandler ) ; 
+		if ( res.failed() )
+			cout << "failed to regsiter CI.HandActivated!" << endl ; 
+		else
+			cout << "succesfully registered CI.HandActivat6ed! " << endl ; 
+
+		res = m_device->getEventManager().registerEventListener( "CI.HandDeactivated" , *this , &CloseIisuServer::handDeactivatedHandler ) ; 
+		if ( res.failed() )
+			cout << "failed to regsiter CI.HandDeactivated!" << endl ; 
+		else
+			cout << "succesfully registered CI.HandDeactivated! " << endl ; 
+	}
 	// we need it check if applicatin is set-up properly
 	//m_uiEnabledParameter = m_device->registerParameterHandle<bool>("UI.Enabled");
 	//m_controllersCount = m_device->registerParameterHandle<int32_t>("UI.ControllerCount");
@@ -153,6 +170,17 @@ void IisuServer::initIisu()
 		exit(0);
 	}
 }
+
+void IisuServer::handActivatedHandler( SK::HandActivatedEvent ) 
+{
+	cout << "hand activated! " << endl ;
+}
+void IisuServer::handDeactivatedHandler( SK::HandDeactivatedEvent )
+{
+	cout << "hand deactivated! " << endl ; 
+
+}
+
 
 void IisuServer::onError(const ErrorEvent& event)
 {
@@ -211,6 +239,18 @@ void IisuServer::onDataFrame(const DataFrameEvent& event)
 		pointerGlobalCoordinates[ i ] = pointerGlobalCoordinatesData[ i ].get() ; 
 	}
 
+	if ( bCloseInteraction ) 
+	{
+		m_hand1_status = m_hand1_statusHandle.get( ) ; 
+		if ( m_hand1_status >  0 ) 
+		{
+			m_hand1_palmPosition = m_hand1_palmPositionHandle.get() ;
+			m_hand1_fingerTipsStatus = m_hand1_fingerTipsStatusHandle.get() ; 
+			m_hand1_fingerTips = m_hand1_fingerTipsHandle.get() ; 
+			m_hand1_open = m_hand1_openHandle.get() ; 
+			m_hand1_openAmount = m_hand1_openAmountHandle.get() ; 
+		}
+	}
 	/*
 	//UI + Controller
 	m_controllerIsActive_0 = m_controllerIsActiveData_0.get();

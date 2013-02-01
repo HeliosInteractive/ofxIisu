@@ -78,13 +78,36 @@ class IisuServer
 		//Camera
 		SK::Image								sceneImage ; 
 	
-	
+		//Two modes for the camera close / far
+		bool bCloseInteraction ;		
+
+		//Close Range Interaction
+		DataHandle<int32_t>							m_hand1_statusHandle ; 
+		ParameterHandle<bool>						m_CI_EnabledHandle ; 
+		DataHandle<Vector3>							m_hand1_palmPositionHandle ; 
+		DataHandle<SK::Array<Vector3>>				m_hand1_fingerTipsHandle ; 
+		DataHandle<SK::Array<int32_t>>				m_hand1_fingerTipsStatusHandle ; 
+		DataHandle<bool>							m_hand1_openHandle ; 
+		DataHandle<float>							m_hand1_openAmountHandle ;
+
+		bool									m_CI_Enabled ; 
+		int32_t									m_hand1_status ; 
+		Vector3									m_hand1_palmPosition ; 
+		SK::Array<Vector3>						m_hand1_fingerTips ; 
+		SK::Array<int32_t>						m_hand1_fingerTipsStatus ; 
+		bool									m_hand1_open ; 
+		float									m_hand1_openAmount ;
+
+		void handPoseGestureHandler ( SK::HandPosingGestureEvent e ) ;  
+		void handActivatedHandler( SK::HandActivatedEvent ) ; 
+		void handDeactivatedHandler( SK::HandDeactivatedEvent ) ;
+
 		// events callbacks
 		void onError(const ErrorEvent& event);
 		void onDataFrame(const DataFrameEvent& event)	; 
 		void registerEvents() ; 
 
-		void setup() ; 
+		void setup( bool _bCloseInteraction ) ; 
 		void initIisu() ; 
 		int addController( ) ;
 		void exit( int exitCode = -1 ) ; 

@@ -38,3 +38,29 @@ ofVec3f IisuUtils::IIsuPosition3DToOfxScreen( Vector3 IisuPosition , ofPoint sca
 		
 	return screenPosition ;
 }
+ofVec3f  IisuUtils::IIsuPosition3DToOfxScreen ( Vector3 iisuPosition , float paddingRatio  , bool bMirror , bool bKeepWithinBounds ) 
+{
+	ofVec3f loc = ofVec3f ( iisuPosition.x , iisuPosition.y , iisuPosition.z ) ; 
+	float mirrorFactor = 1 ; 
+	if ( bMirror == true ) 
+		mirrorFactor = -1 ; 
+
+
+	ofVec3f desiredLoc = ofVec3f ( ofMap( mirrorFactor * loc.x , -.25 , .25 , ofGetWidth() * -paddingRatio , ofGetWidth() * ( 1 + paddingRatio ) ) , 
+								   ofMap( mirrorFactor * loc.z , -.25 , .25 , ofGetHeight() * -paddingRatio , ofGetHeight() * ( 1 + paddingRatio ) ) ,
+								   iisuPosition.y ) ; 
+
+	if ( bKeepWithinBounds )
+	{
+		if ( desiredLoc.x > ofGetWidth() ) 
+			desiredLoc.x = ofGetWidth() ; 
+		if ( desiredLoc.x < 0 ) 
+			desiredLoc.x = 0 ; 
+		if ( desiredLoc.y < 0 ) 
+			desiredLoc.y = 0 ; 
+		if ( desiredLoc.y > ofGetHeight() ) 
+			desiredLoc.y = ofGetHeight() ; 
+	}
+
+	return desiredLoc ; 
+}

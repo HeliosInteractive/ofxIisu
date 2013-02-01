@@ -1,7 +1,9 @@
 #pragma once
 
 #include "ofMain.h"
-#include "CloseIisuServer.h"
+#include "ofxIisu.h"
+#include "DepthCursor.h"
+
 //#define MOUSE_DEBUG 1
 
 class HandCursor
@@ -16,7 +18,7 @@ class HandCursor
 			float radius ; 
 		};
 
-		CloseIisuServer * iisu ; 
+		IisuServer * iisu ; 
 
 		void setup ( ) ; 
 		void update ( ) ; 
