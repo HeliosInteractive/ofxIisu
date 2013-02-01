@@ -28,7 +28,7 @@ class testApp : public ofBaseApp{
 #endif
 		
 		HandCursor hand ; 
-		IisuUserRepresentation iisuUserRep ;
+		//IisuUserRepresentation iisuUserRep ;
 
 
 };

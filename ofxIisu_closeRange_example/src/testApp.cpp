@@ -20,7 +20,7 @@ void testApp::setup(){
 	hand.iisu = &iisuServer ; 
 #endif 
 
-	iisuUserRep.setup( &iisuServer ) ; 
+	//iisuUserRep.setup( &iisuServer ) ; 
 
 }
 
@@ -28,14 +28,14 @@ void testApp::setup(){
 void testApp::update(){
 
 	hand.update( ) ;
-	iisuUserRep.update( ) ; 
+	//iisuUserRep.update( ) ; 
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
 
 	hand.draw( ) ; 
-	iisuUserRep.draw( 15 , 15 , 160 , 120 ) ;
+	//iisuUserRep.draw( 15 , 15 , 160 , 120 ) ;
 }
 
 //--------------------------------------------------------------
