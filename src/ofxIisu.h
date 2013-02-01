@@ -4,5 +4,7 @@
 #include "IisuServer.h" 
 #include "IisuEvents.h" 
 #include "DepthCursor.h"
+#include "HandCursor.h"
+#include "IisuUserRepresentation.h"
 
 #endif ; 

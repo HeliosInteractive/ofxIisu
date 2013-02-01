@@ -14,25 +14,28 @@ void testApp::setup(){
 	ofSetFrameRate( 60 ) ; 
 
 	hand = HandCursor() ; 
-	hand.setup( ) ; 
+	hand.setup( &iisuServer , 0 , ofColor::fromHsb( ofRandom( 255 ) , 255 , 255 ) ) ; 
 
 #ifndef MOUSE_DEBUG
 	hand.iisu = &iisuServer ; 
-#endif
+#endif 
+
+	iisuUserRep.setup( &iisuServer ) ; 
 
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
 
-	hand.updateIisu( ) ;
+	hand.update( ) ;
+	iisuUserRep.update( ) ; 
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
-	
-	ofSetColor( 255 , 255 , 255 ) ; 
+
 	hand.draw( ) ; 
+	iisuUserRep.draw( 15 , 15 , 160 , 120 ) ;
 }
 
 //--------------------------------------------------------------

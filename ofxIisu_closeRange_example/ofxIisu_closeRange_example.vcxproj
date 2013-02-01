@@ -98,23 +98,19 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\HandCursorFinger.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\testApp.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxIisu\src\CloseIisuServer.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxIisu\src\CursorGestureHub.cpp" />
     <ClCompile Include="..\..\..\addons\ofxIisu\src\DepthCursor.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxIisu\src\GestureSkeleton.cpp" />
     <ClCompile Include="..\..\..\addons\ofxIisu\src\HandCursor.cpp" />
     <ClCompile Include="..\..\..\addons\ofxIisu\src\IisuServer.cpp" />
     <ClCompile Include="..\..\..\addons\ofxIisu\src\IisuSkeleton.cpp" />
     <ClCompile Include="..\..\..\addons\ofxIisu\src\IisuUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\HandCursorFinger.h" />
     <ClInclude Include="src\testApp.h" />
-    <ClInclude Include="..\..\..\addons\ofxIisu\src\CloseIisuServer.h" />
-    <ClInclude Include="..\..\..\addons\ofxIisu\src\CursorGestureHub.h" />
     <ClInclude Include="..\..\..\addons\ofxIisu\src\DepthCursor.h" />
-    <ClInclude Include="..\..\..\addons\ofxIisu\src\GestureSkeleton.h" />
     <ClInclude Include="..\..\..\addons\ofxIisu\src\HandCursor.h" />
     <ClInclude Include="..\..\..\addons\ofxIisu\src\IisuEventArgs.h" />
     <ClInclude Include="..\..\..\addons\ofxIisu\src\IisuEvents.h" />

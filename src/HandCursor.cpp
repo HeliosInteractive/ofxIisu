@@ -1,22 +1,19 @@
 #include "HandCursor.h"
 
-void HandCursor::setup( ) 
+void HandCursor::setup( IisuServer * iisu , int cursorID , ofColor _color ) 
 {
-	
+	//Initialize everything the same as DepthCursor
+	DepthCursor::setup( iisu , cursorID , _color ) ; 
 	palmWeighting = 1.25 ; 
 	int numFingers = 5 ; 
 	activeFingers = 0 ; 
 
 	for ( int i = 0 ; i < numFingers ; i++ ) 
 	{
-		Finger * finger = new Finger() ; ; 
-		finger->status = 0 ; 
-		finger->radius = 12 ; 
-		finger->pt = ofVec2f() ; 
+		HandCursorFinger * finger = new HandCursorFinger() ; 
+		finger->setup( i , 5 , ofColor::fromHsb( i * .25f * 255.0f , 255 , 255 ) ) ; 
 		fingers.push_back( finger ) ; 
 	}
-
-	bTracked = false ; 
 
 	bOpen = false ; 
 	openAmount = 1.0f ; 
@@ -26,17 +23,12 @@ void HandCursor::setup( )
 
 void HandCursor::update ( ) 
 {
-
-}
-
-void HandCursor::updateIisu ( )
-{
-
+	
 #ifndef MOUSE_DEBUG
 	if ( iisu->m_device==NULL || iisu->m_iisuHandle==NULL)
 	{
 		cout << "Iisu is not initialized" <<endl;
-		bTracked = false ; 
+		bActive = false ; 
 		//getchar();
 		return ; 
 	}
@@ -66,10 +58,10 @@ void HandCursor::updateIisu ( )
 
 		//openAmount = iisu->m_hand1_openAmount ; 
 		ofVec3f _fingerCentroid = ofVec3f() ; 
-		bTracked = true ; 
+		bActive = true ; 
 		//Calculate the palm position
 		
-		ofVec3f desiredLoc = IisuUtils::Instance()->IIsuPosition3DToOfxScreen( iisu->m_hand1_palmPosition , 0.25 , true , true ) ; 
+		ofVec3f desiredLoc = IisuUtils::Instance()->VectorToPoint(iisu->m_hand1_palmPosition) * 300.0f ; //IisuUtils::Instance()->IIsuPosition3DToOfxScreen( iisu->m_hand1_palmPosition , 0.25 , true , true ) ; 
 		//ofVec3f desiredLoc =IisuUtils::Instance()->IIsuPosition3DToOfxScreen( iisu->m_hand1_palmPosition , 0.25 , true , true ) ; 
 
 		//Normalized : 
@@ -88,14 +80,9 @@ void HandCursor::updateIisu ( )
 		normalized += ( ofVec2f( 0.5 , 0.5 ) ) ; 
 		desiredLoc.x = normalized.x * (float)ofGetWidth() ; 
 		desiredLoc.y = normalized.y * (float)ofGetHeight() ; 
-		//desiredLoc.z = 0 ; 
-
-
-		//cout << "Normalized : " << normalized.x << " , " << normalized.y << endl ; 
-		palmPosition = palmPosition.interpolate( desiredLoc , 0.5f ) ; 
-
-		//vector<Finger*>::iterator finger ; 
-		/*
+		desiredLoc.z = normalized.z * 50 ; 
+		position = position.interpolate( desiredLoc , 0.5f ) ; 
+		
 		if ( fingers.size() > 0 ) 
 		{
 			for ( int f = 0 ; f < fingers.size() ; f++ ) 
@@ -104,35 +91,32 @@ void HandCursor::updateIisu ( )
 				if ( (fingers[f])->status > 0 ) 
 				{
 					activeFingers++ ; 
-					ofVec2f desiredLoc = iisu->Iisu3DtoStage(  iisu->m_hand1_fingerTips[f] , 0.25f , true , true ) ; 
-					//if ( count == 0 ) 
-					//	cout << " z : " <<  iisu->m_hand1_fingerTips[count].y << endl ; 
+					ofVec3f desiredLoc = IisuUtils::Instance()->IIsuPosition3DToOfxScreen(  iisu->m_hand1_fingerTips[f]  ,0.25  , true , true ) ;
 					float normalZ = ofMap( iisu->m_hand1_fingerTips[f].y , 0.2f , 0.9f , 0.0f , 1.0 , true ) ; 
 					(fingers[f])->radius = ( 0.9f - normalZ ) * 40.0f ; 
-					(fingers[f])->pt = desiredLoc ; 
+					(fingers[f])->position = desiredLoc ; 
 					_fingerCentroid += desiredLoc ; 
 				
 				}
 			}
+
 			//Add the palm and give it a little more weight
-			_fingerCentroid += palmPosition ;
+			_fingerCentroid += position ;
 			_fingerCentroid /= ( float ) ( activeFingers + 1 )  ; 
-			//fingerCentroid = _fingerCentroid ; 
-			Tweenzor::add( &fingerCentroid.x , fingerCentroid.x , _fingerCentroid.x , 0.00f , 0.2f , EASE_OUT_QUAD ) ; 
-			Tweenzor::add( &fingerCentroid.y , fingerCentroid.y , _fingerCentroid.y , 0.00f , 0.2f , EASE_OUT_QUAD ) ; 
+			fingerCentroid.interpolate( _fingerCentroid , 0.5f ) ; 
 		}
 		else
 		{
-			fingerCentroid = palmPosition ; 
-		}*/
+			fingerCentroid = position ; 
+		}
 
-		fingerCentroid = palmPosition ; 
+		fingerCentroid = position ; 
 
 		
 	}
 	else
 	{
-		bTracked = false ; 
+		bActive = false ; 
 	}
 
 	//cout << "updating IISU! " << endl ; 
@@ -158,41 +142,24 @@ void HandCursor::draw ( )
 			{
 				ofSetLineWidth( 4 ) ; 
 				ofSetColor ( 15 , 255 , 15 , 255 ) ; 
-				ofNoFill() ; 
 			}
 			else
 			{
 				ofSetColor( 15 , 15 , 255 , 255 ) ; 
-				ofFill() ; 
 			}
-			ofCircle( 0 , 0 , 25 + openAmount * 25.0f );
+			ofCircle( position , 25 + openAmount * 25.0f  ) ; 
 		ofPopStyle() ; 
 	ofPopMatrix() ; 
 
-	/*
-	//vector<Finger*>::iterator finger ; 
 	for ( int f = 0  ; f < fingers.size() ; f++ ) 
 	{
-		if ( (fingers[f])->status > 0 ) 
-		{
-			ofCircle( (fingers[f])->pt , (fingers[f])->radius ) ; 
-			ofPushStyle( ) ; 
-				ofSetColor ( 125 , 125 , 125 , 145 ) ; 
-				ofLine ( (fingers[f])->pt , palmPosition ) ; 
-			ofPopStyle( ) ; 
-		}
+		fingers[f]->draw() ; 
 	}
-	*/
+	
 
 #endif
-	/*
-	ofPushStyle( ) ;
-		ofSetLineWidth( 3 ) ; 
-		ofNoFill ( ) ; 
-		ofSetColor ( 125 , 125 , 125 , 175 ) ; 
-		ofCircle( fingerCentroid , 25 ) ; 
-	ofPopStyle( ) ; 
-	*/
+
+
 }	
 
 void HandCursor::debugDraw( )

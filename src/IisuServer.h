@@ -118,9 +118,11 @@ class IisuServer
 		Vector3 getNormalizedCursorCoordinates ( int cursorID ) ; 
 		Vector3 getWorldCursorPosition( int cursorID ) ; 
 
+		/*
 		ofVec3f iisuPointToOF( Vector3 point ) ; 
 		ofVec3f iisuPointToOF( Vector3 point , ofVec3f range ) ; 
 		ofVec3f IIsuPosition3DToOfxScreen( Vector3 IisuPosition , ofRectangle bounds , bool mirrorX = false , bool mirrorY = false ) ; 
+		*/
 };
 
 

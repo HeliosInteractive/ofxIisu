@@ -119,13 +119,13 @@ void IisuServer::initIisu()
 
 		m_hand1_openHandle = m_device->registerDataHandle<bool>("CI.HAND1.IsOpen" ) ; 
 		m_hand1_openAmountHandle = m_device->registerDataHandle<float>("CI.HAND1.Openness" ) ; 
-		Result res = m_device->getEventManager().registerEventListener( "CI.HandActivated" , *this , &CloseIisuServer::handActivatedHandler ) ; 
+		Result res = m_device->getEventManager().registerEventListener( "CI.HandActivated" , *this , &IisuServer::handActivatedHandler ) ; 
 		if ( res.failed() )
 			cout << "failed to regsiter CI.HandActivated!" << endl ; 
 		else
 			cout << "succesfully registered CI.HandActivat6ed! " << endl ; 
 
-		res = m_device->getEventManager().registerEventListener( "CI.HandDeactivated" , *this , &CloseIisuServer::handDeactivatedHandler ) ; 
+		res = m_device->getEventManager().registerEventListener( "CI.HandDeactivated" , *this , &IisuServer::handDeactivatedHandler ) ; 
 		if ( res.failed() )
 			cout << "failed to regsiter CI.HandDeactivated!" << endl ; 
 		else
@@ -386,6 +386,7 @@ void IisuServer::exit ( int exitCode )
 	ofNotifyEvent( IisuEvents::Instance()->exitApplication , exitCode , this ) ; 
 }
 
+/*
 ofVec3f IisuServer::iisuPointToOF( Vector3 point )
 {
 	ofVec3f vector = ofVec3f( (( point.x +1.0f )/2.0f ) * ofGetWidth() ,ofGetHeight() +- ( ( point.z +1.0f ) /2.0f ) * ofGetHeight() ,  point.y ) ; 
@@ -410,3 +411,4 @@ ofVec3f IisuServer::IIsuPosition3DToOfxScreen( Vector3 IisuPosition , ofRectangl
 		
 	return screenPosition ;
 }
+*/

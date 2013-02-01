@@ -1,23 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
-#include "IisuServer.h"
+#include "ofxIisu.h"
 #include "HandCursor.h"
-
-#ifndef MOUSE_DEBUG
-//iisuSDK global header (includes all iisu functionalities)
-#include <SDK/iisuSDK.h>
-#include <iostream>
-#endif
-
-#ifdef WIN32
-#include <windows.h>
-#endif
-
-#ifndef MOUSE_DEBUG
-using namespace SK;
-using namespace std;
-#endif
 
 class testApp : public ofBaseApp{
 	public:
@@ -43,7 +28,7 @@ class testApp : public ofBaseApp{
 #endif
 		
 		HandCursor hand ; 
-
+		IisuUserRepresentation iisuUserRep ;
 
 
 };

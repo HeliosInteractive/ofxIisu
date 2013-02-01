@@ -11,10 +11,10 @@ class DepthCursor
 			iisu = NULL ; 
 		}
 		
-		void setup ( IisuServer * _iisu , int _cursorID , ofColor _color ) ;
-		void update( ) ;
-		void draw ( ) ;
-		void debugDraw( ) ; 
+		virtual void setup ( IisuServer * _iisu , int _cursorID , ofColor _color ) ;
+		virtual void update( ) ;
+		virtual void draw ( ) ;
+		virtual void debugDraw( ) ; 
 
 		//Iisu cursor changes
 		void cursorFoundHandler ( int &args ) ;
@@ -24,10 +24,10 @@ class DepthCursor
 		bool bActive ; 
 		int cursorID ;			//iisu ID
 		int cursorStatus ;		//found, lost, out of bounds  // LOOK UP ENUM VALUES
-		ofVec2f position ;		//Screen / Window Coordinates	
+		ofVec3f position ;		//Screen / Window Coordinates	
 		ofColor color ;			
 
 		IisuServer * iisu ; 
-		
+		bool bDebugDraw ; 
 
 };

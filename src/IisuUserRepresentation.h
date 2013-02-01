@@ -54,10 +54,11 @@ class IisuUserRepresentation
 		
 		int imageWidth , imageHeight ; 
 
-		void setup ( int _w = 160 , int _h = 120 ) 
+		void setup ( IisuServer * _iisu , int _w = 160 , int _h = 120 ) 
 		{
 			imageWidth = _w ; 
 			imageHeight = _h ; 
+			iisu = _iisu ; 
 			pPointerStatus = -3 ; 
 			lastFrame= -4 ; 
 			sceneImage.allocate( imageWidth , imageHeight , OF_IMAGE_GRAYSCALE ) ; 
@@ -73,13 +74,13 @@ class IisuUserRepresentation
 
 		void update ( ) 
 		{
-
 //			getStatusString( iisu->m_pointerStatus ) ; 
 			//cout << "iisu user rep update! " << endl ; 
+
 			if ( iisu->sceneImageHandle.isValid() == 1 )
 			{
 
-				//cout << "VALID! " << endl ;
+				cout << "VALID! " << endl ;
 				int totalPixels = imageWidth * imageHeight ;
 
 				//Awesomely added by Andy Warner
