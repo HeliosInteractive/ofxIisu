@@ -310,6 +310,16 @@ void IisuServer::registerEvents ( )
 		exit();
 	}
 
+	ret = m_iisuHandle->getEventManager().registerEventListener("CI.HandPosingGesture", *this, &IisuServer::handPoseGestureHandler );
+	if (ret.failed()) 
+	{
+		cerr << "Failed to register for CI.HandPosing Gesture events!" << endl
+			<< "Error " << ret.getErrorCode() << ": " << ret.getDescription().ptr() << endl;
+		getchar();
+		exit();
+	}
+	
+
 	/*
 	// users activation events 
 	ret = m_iisuHandle->getEventManager().registerEventListener("UM.UserActivated", *this, &IisuServer::onUserActivation);
@@ -330,8 +340,34 @@ void IisuServer::registerEvents ( )
 		getchar();
 		exit();
 	}
-	*/
 	
+	*/
+}
+
+void IisuServer::handPoseGestureHandler ( SK::HandPosingGestureEvent e ) 
+{
+	//Get posing metaInfo
+	SK::Return<SK::MetaInfo<SK::HandPosingGestureEvent> > retMetaInfo = m_device->getEventManager().getMetaInfo<SK::HandPosingGestureEvent>("CI.HandPosingGesture") ; 
+
+	if ( retMetaInfo.succeeded() ) 
+	{
+		SK::MetaInfo<SK::HandPosingGestureEvent> poseMetaInfo = retMetaInfo.get() ; 
+		const SK::EnumMapper &enumMapper = poseMetaInfo.getEnumMapper() ; 
+
+		int gestureID = e.getGestureTypeID() ; 
+		SK::Return<SK::String> retPosingGestureName = enumMapper[gestureID] ; 
+		if ( retPosingGestureName.succeeded() ) 
+		{
+			SK::String gestureName = retPosingGestureName.get() ; 
+			cout << "pose: " << gestureName << "   _ gestureTypeID : " << e.getGestureTypeID() << "   _ firstHand ID: " << e.getFirstHandID() << endl ; 
+			int args =  e.getGestureTypeID() ; 
+			ofNotifyEvent( IisuEvents::Instance()->POSE_GESTURE , args ) ; 
+		}
+	}
+	else
+	{
+		cout << "meta Info did not succeed! " << endl ; 
+	}
 }
 
 int IisuServer::getCursorStatus ( int cursorID ) 
