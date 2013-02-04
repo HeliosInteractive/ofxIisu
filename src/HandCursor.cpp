@@ -4,7 +4,6 @@ void HandCursor::setup( IisuServer * iisu , int cursorID , ofColor _color )
 {
 	//Initialize everything the same as DepthCursor
 	DepthCursor::setup( iisu , cursorID , _color ) ; 
-	palmWeighting = 1.25 ; 
 	int numFingers = 5 ; 
 	activeFingers = 0 ; 
 
@@ -46,63 +45,69 @@ void HandCursor::update ( )
 		//Interpolate it just a little bit
 		openAmount = ofLerp( openAmount , iisu->m_hand1_openAmount , 0.5f ) ; 
 
-		//openAmount = iisu->m_hand1_openAmount ; 
-		ofVec3f _fingerCentroid = ofVec3f() ; 
-		bActive = true ; 
-		//Calculate the palm position
-		
-		//ofVec3f desiredLoc = IisuUtils::Instance()->VectorToPoint(iisu->m_hand1_palmPosition) ; // * 300.0f ; //IisuUtils::Instance()->IIsuPosition3DToOfxScreen( iisu->m_hand1_palmPosition , 0.25 , true , true ) ; 
-		ofVec3f desiredLoc =IisuUtils::Instance()->IIsuPosition3DToOfxScreen( iisu->m_hand1_palmPosition , 0.25 , true , true ) ; 
-
-		//Normalized : 
-		ofVec3f normalized = desiredLoc ; 
-		normalized.x = (desiredLoc.x / (float)ofGetWidth())  + -0.5f ; 
-		normalized.y = (desiredLoc.y / (float)ofGetHeight())  + -0.5f ; 
-		normalized.z = 0 ; 
+		bActive = true ;
 
 		float xSensitivity = 1.0f ; 
 		float ySensitivity = 2.0f ; 
-		//float zSensitivity = 1.0f ; 
-		normalized.x *= xSensitivity ; 
-		normalized.y *= ySensitivity ; 
-		//normalized.z *= zSensitivity ; 
 
-		normalized += ( ofVec2f( 0.5 , 0.5 ) ) ; 
-		desiredLoc.x = normalized.x * (float)ofGetWidth() ; 
-		desiredLoc.y = normalized.y * (float)ofGetHeight() ; 
-		desiredLoc.z = 0 ; //normalized.z * 50 ; 
-		position = position.interpolate( desiredLoc , 0.5f ) ; 
-		
+		//Calculate the palm position
+		ofVec2f desiredLoc =  ofVec2f(iisu->m_hand1_palmPosition.x , iisu->m_hand1_palmPosition.y ) ; 
+		desiredLoc.x = ( 1.0f - ( desiredLoc.x / 320.0f ) ) * ofGetWidth() ; 
+		desiredLoc.y = ( ( desiredLoc.y / 240.0f ) ) * ofGetHeight() ; 
+
+		//Calculate the hand tip
+		ofVec2f desiredHandTip =  ofVec2f( iisu->m_hand1_tipPosition2D.x , iisu->m_hand1_tipPosition2D.y  )  ; 
+		desiredHandTip.x = ( 1.0f - ( desiredHandTip.x / 320.0f )) * ofGetWidth() ; 
+		desiredHandTip.y = ( ( desiredHandTip.y / 240.0f )) * ofGetHeight() ; 
+
+		position = desiredLoc ;
+		handTipPosition = desiredHandTip ; 
+
 		if ( fingers.size() > 0 ) 
 		{
 			for ( int f = 0 ; f < fingers.size() ; f++ ) 
 			{ 
-				(fingers[f])->status = iisu->m_hand1_fingerTipsStatus[ f ] ; 
-				if ( (fingers[f])->status > 0 ) 
+				int lastStatus = (fingers[f])->status ;
+				int newStatus = iisu->m_hand1_fingerTipsStatus[ f ] ; 
+				
+				(fingers[f])->status = newStatus ; //iisu->m_hand1_fingerTipsStatus[ f ] ; 
+				
+				if ( lastStatus != newStatus ) 
+				{
+					string lastStatusString = " inactive " ; 
+					if ( lastStatus == 1 ) 
+						lastStatusString = " detected " ; 
+					if ( lastStatus == 2 ) 
+						lastStatusString = " tracked " ; 
+
+					string newStatusString = " inactive " ;
+					if ( newStatus == 1 ) 
+						newStatusString == " detected " ; 
+					if ( newStatus == 1 ) 
+						newStatusString == " tracked " ; 
+
+					
+					ofLog( OF_LOG_VERBOSE,  " finger# " + ofToString( f ) + " was : " + lastStatusString + " is now : " + newStatusString ) ;  
+				}
+					
+				ofVec2f desiredFingerLoc = ofVec2f( iisu->m_hand1_fingerTips[f].x , iisu->m_hand1_fingerTips[f].y ) ;
+				desiredFingerLoc.x = ( 1.0f - ( desiredFingerLoc.x / 320.0f ) ) * ofGetWidth() ; 
+				desiredFingerLoc.y = ( ( desiredFingerLoc.y / 240.0f ) ) * ofGetHeight() ; 
+
+				(fingers[f])->radius = 8.0f ; // ( 0.9f - normalZ ) * 40.0f ; 
+				(fingers[f])->position = desiredFingerLoc ; 
+
+				if ( (fingers[f])->status > 0 )  
 				{
 					activeFingers++ ; 
-					ofVec3f desiredLoc = IisuUtils::Instance()->IIsuPosition3DToOfxScreen(  iisu->m_hand1_fingerTips[f]  ,0.25  , true , true ) ;
-					float normalZ = ofMap( iisu->m_hand1_fingerTips[f].y , 0.2f , 0.9f , 0.0f , 1.0 , true ) ; 
-					(fingers[f])->radius = ( 0.9f - normalZ ) * 40.0f ; 
-					(fingers[f])->position = desiredLoc ; 
-					_fingerCentroid += desiredLoc ; 
-				
 				}
+								
 			}
-
-			//Add the palm and give it a little more weight
-			_fingerCentroid += position ;
-			_fingerCentroid /= ( float ) ( activeFingers + 1 )  ; 
-			fingerCentroid.interpolate( _fingerCentroid , 0.5f ) ; 
 		}
 		else
 		{
-			fingerCentroid = position ; 
+
 		}
-
-		fingerCentroid = position ; 
-
-		
 	}
 	else
 	{
@@ -116,6 +121,7 @@ void HandCursor::draw ( )
 		return ; 
 
 
+	//cout << "position: " << position << " , handTipPosition " << handTipPosition << endl ; 
 	for ( int f = 0  ; f < fingers.size() ; f++ ) 
 	{
 		fingers[f]->draw() ; 
@@ -125,9 +131,34 @@ void HandCursor::draw ( )
 	if ( bOpen )
 		ofSetColor ( color ) ; 
 	else
-		ofSetColor( color.invert() ) ; 
-	ofCircle( fingerCentroid.x , fingerCentroid.y , 25 + openAmount * 25.0f  ) ;
-	
+		ofSetColor( color , 125 ) ; 
+	ofCircle( position.x , position.y , 25 + openAmount * 25.0f  ) ;
+	ofCircle( handTipPosition.x , handTipPosition.y , 20.0f  ) ;
+
+	ofSetColor( 255 , 255 , 255 ) ; 
+	ofPushStyle() ; 
+		ofEnableSmoothing();
+		ofSetColor( color ) ; 
+
+		float maxLineWidth = 15.0f ;
+		float nSegments = maxLineWidth ; //15.0f ; 
+		ofVec2f lastPoint ; 
+		for ( int i = 0 ; i < nSegments ; i++ ) 
+		{
+			float ratio = ( (float ) i / ( nSegments ) ) ; 
+			ofVec2f p = position.interpolate( handTipPosition ,ratio ) ; 
+
+			if ( i > 0 ) 
+			{
+				ofSetLineWidth ( ( 1.0f - ratio )  * maxLineWidth ) ; 
+				ofLine ( p , lastPoint ) ; 
+			}
+
+			lastPoint = p ; 
+
+		}
+		//ofLine ( position , handTipPosition ) ; 
+	ofPopStyle( ) ; 
 
 	
 }	
@@ -139,8 +170,8 @@ void HandCursor::debugDraw( )
 	if ( iisu->m_hand1_status < 1 ) 
 		return ; 
 	
-	string status = "Hand #" + ofToString ( cursorID ) ; 
-	ofDrawBitmapStringHighlight( status , fingerCentroid.x , fingerCentroid.y) ; 
+	string status = "Hand #" + ofToString ( cursorID ) + " #"+ofToString( activeFingers ) + " fingers " ; 
+	ofDrawBitmapStringHighlight( status , position.x , position.y) ; 
 	ofPushMatrix() ; 
 		//ofTranslate( fingerCentroid.x , fingerCentroid.y , 0 ) ; // fingerCentroid.z ) ; 
 		for ( int f = 0  ; f < fingers.size() ; f++ ) 

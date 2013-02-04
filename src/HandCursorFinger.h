@@ -17,7 +17,7 @@ public :
 
 	int id ; 
 	int status ; 
-	ofVec3f position ; 
+	ofVec2f position ; 
 	float radius ;
 	ofColor color ;
 };

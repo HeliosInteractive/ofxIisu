@@ -113,9 +113,11 @@ void IisuServer::initIisu()
 	{
 		m_CI_EnabledHandle = m_device->registerParameterHandle<bool>("CI.Enabled") ; 
 		m_hand1_statusHandle = m_device->registerDataHandle<int32_t>("CI.HAND1.Status") ; 
-		m_hand1_palmPositionHandle = m_device->registerDataHandle<Vector3>("CI.HAND1.PalmPosition3D" ) ; 
-		m_hand1_fingerTipsHandle = m_device->registerDataHandle<SK::Array<Vector3>>("CI.HAND1.FingerTipPositions3D" ) ; 
+		m_hand1_palmPositionHandle = m_device->registerDataHandle<Vector2>("CI.HAND1.PalmPosition2D" ) ; 
+		m_hand1_fingerTipsHandle = m_device->registerDataHandle<SK::Array<Vector2>>("CI.HAND1.FingerTipPositions2D" ) ; 
 		m_hand1_fingerTipsStatusHandle = m_device->registerDataHandle<SK::Array<int32_t>>("CI.HAND1.FingerStatus" ) ; 
+		m_hand1_tipPosition2DHandle = m_device->registerDataHandle<Vector2>("CI.HAND1.TipPosition2D" ) ; 
+		//DataHandle<Vector3>							m_hand1_tipPosition3DHandle ; 
 
 		m_hand1_openHandle = m_device->registerDataHandle<bool>("CI.HAND1.IsOpen" ) ; 
 		m_hand1_openAmountHandle = m_device->registerDataHandle<float>("CI.HAND1.Openness" ) ; 
@@ -248,7 +250,8 @@ void IisuServer::onDataFrame(const DataFrameEvent& event)
 			m_hand1_fingerTipsStatus = m_hand1_fingerTipsStatusHandle.get() ; 
 			m_hand1_fingerTips = m_hand1_fingerTipsHandle.get() ; 
 			m_hand1_open = m_hand1_openHandle.get() ; 
-			m_hand1_openAmount = m_hand1_openAmountHandle.get() ; 
+			m_hand1_openAmount = m_hand1_openAmountHandle.get() ;
+			m_hand1_tipPosition2D = m_hand1_tipPosition2DHandle.get() ; 
 		}
 	}
 	

@@ -16,13 +16,11 @@ class HandCursor : public DepthCursor
 		void debugDraw( ) ; 
 
 		vector<HandCursorFinger*> fingers ;   
-		ofVec3f fingerCentroid ; 
 		
 		float zFactor ; 
 
 		int activeFingers ; 
-		float palmWeighting ;
-
+		ofVec2f handTipPosition ; 
 
 		bool bOpen ; 
 		float openAmount ; 

@@ -13,7 +13,7 @@ ofVec3f IisuUtils::iisuPointToOF( Vector3 point , ofVec3f range )
 	return vector ; 
 }
 
-ofVec3f IisuUtils::IIsuPosition3DToOfxScreen( Vector3 IisuPosition , ofRectangle bounds , bool mirrorX , bool mirrorY )
+ofVec3f IisuUtils::iisuPosition3DToOfxScreen( Vector3 IisuPosition , ofRectangle bounds , bool mirrorX , bool mirrorY )
 {
 	ofVec3f screenPosition ; 
 	float factorX = ( mirrorX == true ) ? -2 : 2 ; 
@@ -26,7 +26,7 @@ ofVec3f IisuUtils::IIsuPosition3DToOfxScreen( Vector3 IisuPosition , ofRectangle
 	return screenPosition ;
 }
 
-ofVec3f IisuUtils::IIsuPosition3DToOfxScreen( Vector3 IisuPosition , ofPoint scale , bool mirrorX , bool mirrorY )
+ofVec3f IisuUtils::iisuPosition3DToOfxScreen( Vector3 IisuPosition , ofPoint scale , bool mirrorX , bool mirrorY )
 {
 	ofVec3f screenPosition ; 
 	float factorX = ( mirrorX == true ) ? -1 : 1 ; 
@@ -40,7 +40,7 @@ ofVec3f IisuUtils::IIsuPosition3DToOfxScreen( Vector3 IisuPosition , ofPoint sca
 }
 //ofVec3f IIsuPosition3DToOfxScreen(  Vector3 iisuPosition , float paddingRatio = 0.0f , bool bMirror = true , bool bKeepWithinBounds = true ) ; 
 		
-ofVec3f  IisuUtils::IIsuPosition3DToOfxScreen ( Vector3 iisuPosition , float paddingRatio  , bool bMirror , bool bKeepWithinBounds ) 
+ofVec3f  IisuUtils::iisuPosition3DToOfxScreen ( Vector3 iisuPosition , float paddingRatio  , bool bMirror , bool bKeepWithinBounds ) 
 {
 	ofVec3f loc = ofVec3f ( iisuPosition.x , iisuPosition.y , iisuPosition.z ) ; 
 	float mirrorFactor = 1 ; 
@@ -48,9 +48,34 @@ ofVec3f  IisuUtils::IIsuPosition3DToOfxScreen ( Vector3 iisuPosition , float pad
 		mirrorFactor = -1 ; 
 
 
-	ofVec3f desiredLoc = ofVec3f ( ofMap( mirrorFactor * loc.x , -.25 , .25 , ofGetWidth() * -paddingRatio , ofGetWidth() * ( 1 + paddingRatio ) ) , 
-								   ofMap( mirrorFactor * loc.z , -.25 , .25 , ofGetHeight() * -paddingRatio , ofGetHeight() * ( 1 + paddingRatio ) ) ,
+	ofVec3f desiredLoc = ofVec3f ( ofMap( mirrorFactor * loc.x , -paddingRatio , paddingRatio , ofGetWidth() * -paddingRatio , ofGetWidth() * ( 1 + paddingRatio ) ) , 
+								   ofMap( mirrorFactor * loc.z , -paddingRatio , paddingRatio , ofGetHeight() * -paddingRatio , ofGetHeight() * ( 1 + paddingRatio ) ) ,
 								   iisuPosition.y ) ; 
+	if ( bKeepWithinBounds )
+	{
+		if ( desiredLoc.x > ofGetWidth() ) 
+			desiredLoc.x = ofGetWidth() ; 
+		if ( desiredLoc.x < 0 ) 
+			desiredLoc.x = 0 ; 
+		if ( desiredLoc.y < 0 ) 
+			desiredLoc.y = 0 ; 
+		if ( desiredLoc.y > ofGetHeight() ) 
+			desiredLoc.y = ofGetHeight() ; 
+	}
+
+	return desiredLoc ; 
+}
+
+ofVec2f  IisuUtils::iisuPosition2DToOfxScreen ( Vector2 iisuPosition , float paddingRatio  , bool bMirror , bool bKeepWithinBounds ) 
+{
+	ofVec2f loc = ofVec3f ( iisuPosition.x , iisuPosition.y ) ; 
+	float mirrorFactor = 1 ; 
+	if ( bMirror == true ) 
+		mirrorFactor = -1 ; 
+
+
+	ofVec2f desiredLoc = ofVec2f ( ofMap( mirrorFactor * loc.x , -paddingRatio , paddingRatio , ofGetWidth() * -paddingRatio , ofGetWidth() * ( 1 + paddingRatio ) ) , 
+								   ofMap( mirrorFactor * loc.y , -paddingRatio , paddingRatio , ofGetHeight() * -paddingRatio , ofGetHeight() * ( 1 + paddingRatio ) )  ) ; 
 	if ( bKeepWithinBounds )
 	{
 		if ( desiredLoc.x > ofGetWidth() ) 

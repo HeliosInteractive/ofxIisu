@@ -16,10 +16,15 @@ void HandCursorFinger::update ( )
 
 void HandCursorFinger::draw ( ) 
 {
+	float alpha = 15.0f ; 
+	if ( status == 1 ) 
+		alpha = 120 ; 
+	if ( status == 2 ) 
+		alpha = 255 ; 
 	if ( status > 0 ) 
 	{
 		ofEnableSmoothing( ) ; 
-		ofSetColor ( color ) ; 
+		ofSetColor ( color , alpha ) ; 
 		ofCircle( position , radius ) ; 
 	}
 }
@@ -28,8 +33,13 @@ void HandCursorFinger::debugDraw( )
 {
 	if ( status > 0 ) 
 	{
-		string status = "# " + ofToString( id ) ; 
+		string fingerStatus = "not active" ; 
+		if ( status == 1 ) 
+			fingerStatus = "not tracked" ; 
+		if ( status == 2 ) 
+			fingerStatus = "tracked" ;
+		string _status = "# " + ofToString( id ) + " : " + fingerStatus ; 
 		//cout << "deubgDraw @ " << position << endl ; 
-		ofDrawBitmapStringHighlight( status , position.x , position.y +- radius * 2.0f ) ; 
+		ofDrawBitmapStringHighlight( _status , position.x , position.y +- radius * 2.0f ) ; 
 	}
 }

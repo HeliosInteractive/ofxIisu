@@ -38,7 +38,7 @@ void IisuSkeleton::update ( )
 			keyP.y += offset.z ; 
 			keyP.z += offset.y ; 
 			ofVec3f _scale = ofVec3f( scale.x , scale.x , scale.x ) ; 
-			ofVec3f p = IisuUtils::Instance()->IIsuPosition3DToOfxScreen( keyP , _scale , bFlipX , bFlipY ) ; 
+			ofVec3f p = IisuUtils::Instance()->iisuPosition3DToOfxScreen( keyP , _scale , bFlipX , bFlipY ) ; 
 			positions.push_back( p ) ; 
 		}
 

@@ -28,9 +28,10 @@ class IisuUtils
 
 		ofVec3f iisuPointToOF( Vector3 point ) ; 
 		ofVec3f iisuPointToOF( Vector3 point , ofVec3f range ) ; 
-		ofVec3f IIsuPosition3DToOfxScreen(  Vector3 iisuPosition , float paddingRatio = 0.0f , bool bMirror = true , bool bKeepWithinBounds = true ) ; 
-		ofVec3f IIsuPosition3DToOfxScreen( Vector3 IisuPosition , ofPoint scale , bool mirrorX = false , bool mirrorY = false ) ; 
-		ofVec3f IIsuPosition3DToOfxScreen( Vector3 IisuPosition , ofRectangle bounds , bool mirrorX = false , bool mirrorY = false ) ; 
-		ofVec3f VectorToPoint( Vector3 v ) { return ofPoint ( v.x , v.z , v.y ) ; } 
+		ofVec3f iisuPosition3DToOfxScreen(  Vector3 iisuPosition , float paddingRatio = 0.0f , bool bMirror = true , bool bKeepWithinBounds = true ) ; 
+		ofVec3f iisuPosition3DToOfxScreen( Vector3 IisuPosition , ofPoint scale , bool mirrorX = false , bool mirrorY = false ) ; 
+		ofVec3f iisuPosition3DToOfxScreen( Vector3 IisuPosition , ofRectangle bounds , bool mirrorX = false , bool mirrorY = false ) ; 
+		ofVec2f iisuPosition2DToOfxScreen( Vector2 iisuPosition , float paddingRatio = 0.0f , bool bMirror = true , bool bKeepWithinBounds = true ) ; 
+		ofVec3f Vector3DToPoint( Vector3 v ) { return ofVec3f ( v.x , v.z , v.y ) ; } 
 		
 };
