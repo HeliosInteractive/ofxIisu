@@ -23,7 +23,7 @@ void HandCursor::setup( IisuServer * iisu , int cursorID , ofColor _color )
 void HandCursor::update ( ) 
 {
 	activeFingers = 0 ; 
-	if ( iisu->m_hand1_status > 0 ) 
+	if ( iisu->getHandStatus( cursorID ) > 0 ) 
 	{
 		bool lastOpen = bOpen ; 
 		bOpen = ( openAmount > handOpenThreshold ) ;
@@ -43,7 +43,7 @@ void HandCursor::update ( )
 		}
 
 		//Interpolate it just a little bit
-		openAmount = ofLerp( openAmount , iisu->m_hand1_openAmount , 0.5f ) ; 
+		openAmount =  ofLerp( openAmount , iisu->getHandsOpenAmount( cursorID ) , 0.5f ) ; 
 
 		bActive = true ;
 
@@ -51,26 +51,33 @@ void HandCursor::update ( )
 		float ySensitivity = 2.0f ; 
 
 		//Calculate the palm position
-		ofVec2f desiredLoc =  ofVec2f(iisu->m_hand1_palmPosition.x , iisu->m_hand1_palmPosition.y ) ; 
-		desiredLoc.x = ( 1.0f - ( desiredLoc.x / 320.0f ) ) * ofGetWidth() ; 
-		desiredLoc.y = ( ( desiredLoc.y / 240.0f ) ) * ofGetHeight() ; 
+		ofVec2f desiredLoc =  IisuUtils::Instance()->Vector2DToPoint( IisuUtils::Instance()->normalize2DPoint( iisu->getHandPalmPosition2D( cursorID ) , 320 , 240 , true ) ) ;
+		desiredLoc.x *= ofGetWidth() ; 
+		desiredLoc.y *= ofGetHeight() ; 
 
 		//Calculate the hand tip
-		ofVec2f desiredHandTip =  ofVec2f( iisu->m_hand1_tipPosition2D.x , iisu->m_hand1_tipPosition2D.y  )  ; 
-		desiredHandTip.x = ( 1.0f - ( desiredHandTip.x / 320.0f )) * ofGetWidth() ; 
-		desiredHandTip.y = ( ( desiredHandTip.y / 240.0f )) * ofGetHeight() ; 
+		ofVec2f desiredHandTip = IisuUtils::Instance()->Vector2DToPoint( IisuUtils::Instance()->normalize2DPoint( iisu->getHandTipPosition2D( cursorID ) , 320 , 240 , true ) ) ;
+		desiredHandTip.x *= ofGetWidth() ; 
+		desiredHandTip.y *= ofGetHeight() ; 
 
 		position = desiredLoc ;
 		handTipPosition = desiredHandTip ; 
 
 		if ( fingers.size() > 0 ) 
 		{
+			SK::Array<int32_t> fingerStatus = iisu->getHandsFingerTipsStatus( cursorID ) ; 
+			SK::Array<Vector2> fingerPositions2D = iisu->getHandsFingerTips2D( cursorID ) ;
+
+			if ( fingerStatus.size() == 0 && fingerPositions2D.size() == 0 ) 
+				return ; 
+
+			
 			for ( int f = 0 ; f < fingers.size() ; f++ ) 
 			{ 
 				int lastStatus = (fingers[f])->status ;
-				int newStatus = iisu->m_hand1_fingerTipsStatus[ f ] ; 
+				int newStatus = fingerStatus[ f ] ; 
 				
-				(fingers[f])->status = newStatus ; //iisu->m_hand1_fingerTipsStatus[ f ] ; 
+				(fingers[f])->status = newStatus ;
 				
 				if ( lastStatus != newStatus ) 
 				{
@@ -90,7 +97,7 @@ void HandCursor::update ( )
 					ofLog( OF_LOG_VERBOSE,  " finger# " + ofToString( f ) + " was : " + lastStatusString + " is now : " + newStatusString ) ;  
 				}
 					
-				ofVec2f desiredFingerLoc = ofVec2f( iisu->m_hand1_fingerTips[f].x , iisu->m_hand1_fingerTips[f].y ) ;
+				ofVec2f desiredFingerLoc = IisuUtils::Instance()->Vector2DToPoint( fingerPositions2D[ f ] ) ;
 				desiredFingerLoc.x = ( 1.0f - ( desiredFingerLoc.x / 320.0f ) ) * ofGetWidth() ; 
 				desiredFingerLoc.y = ( ( desiredFingerLoc.y / 240.0f ) ) * ofGetHeight() ; 
 
@@ -104,10 +111,6 @@ void HandCursor::update ( )
 								
 			}
 		}
-		else
-		{
-
-		}
 	}
 	else
 	{
@@ -117,7 +120,7 @@ void HandCursor::update ( )
 
 void HandCursor::draw ( ) 
 {
-	if ( iisu->m_hand1_status < 1 ) 
+	if ( iisu->getHandStatus( cursorID ) < 1 ) 
 		return ; 
 
 
@@ -167,7 +170,7 @@ void HandCursor::debugDraw( )
 {
 
 
-	if ( iisu->m_hand1_status < 1 ) 
+	if ( iisu->getHandStatus( cursorID ) < 1 )  
 		return ; 
 	
 	string status = "Hand #" + ofToString ( cursorID ) + " #"+ofToString( activeFingers ) + " fingers " ; 

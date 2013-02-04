@@ -90,3 +90,16 @@ ofVec2f  IisuUtils::iisuPosition2DToOfxScreen ( Vector2 iisuPosition , float pad
 
 	return desiredLoc ; 
 }
+
+Vector2 IisuUtils::normalize2DPoint( Vector2 v , float w , float h , bool bMirrorX , bool bMirrorY ) 
+{
+	float newX = v.x / w ; 
+	if ( bMirrorX == true ) 
+		newX = 1.0f - newX ; 
+
+	float newY = v.y / h ; 
+	if ( bMirrorY == true ) 
+		newY = 1.0f - newY ; 
+
+	return Vector2( newX , newY ) ;  
+}

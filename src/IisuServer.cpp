@@ -56,6 +56,7 @@ void IisuServer::setup( bool _bCloseInteraction )
 	registerEvents() ; 
 	initIisu() ; 
 	m_skeletonStatus = 0 ; 
+	numHands = 0 ; 
 }
 
 int IisuServer::addController( ) 
@@ -85,6 +86,53 @@ int IisuServer::addController( )
 	return ( iisuIndex - 1 ) ; 
 	
 }
+int IisuServer::addCloseInteractionHand ( ) 
+{
+	int iisuIndex = numHands + 1 ; 
+	string handString = "CI.HAND" + ofToString( iisuIndex ) + "." ;
+
+	string handStatus = handString + "Status" ; 
+	handStatusesHandle.push_back( m_device->registerDataHandle<int32_t>( handStatus.c_str() ) ) ; 
+	handStatuses.push_back ( 0 ) ; 
+
+	string handPalmPosition2D = handString + "PalmPosition2D" ; 
+	handPalmPositions2DHandle.push_back( m_device->registerDataHandle<Vector2>( handPalmPosition2D.c_str() )) ; 
+	handPalmPositions2D.push_back( Vector2() ) ;
+
+	string handTipPosition2D = handString + "TipPosition2D" ;
+	handTipPositions2DHandle.push_back( m_device->registerDataHandle<Vector2>( handTipPosition2D.c_str() )) ;
+	handTipPositions2D.push_back( Vector2() ) ;
+
+	string handFingerStatusString = handString + "FingerStatus" ; 
+	handFingerTipsStatusHandle.push_back( m_device->registerDataHandle<SK::Array<int32_t>>( handFingerStatusString.c_str() )) ;
+	SK::Array<int32_t> fingerArgs ;
+	//for ( int i = 0 ; i < 5 ; i++ ) fingerArgs.pushBack( 0 ) ; 
+	handFingerTipsStatus.push_back( fingerArgs ) ; 
+
+	string handFingerTips2DString = handString + "FingerTipPositions2D" ; 
+	handFingerTips2DHandle.push_back( m_device->registerDataHandle<SK::Array<Vector2>>( handFingerTips2DString.c_str() )) ;
+	SK::Array<Vector2> fingerTipArgs ; 
+
+	handFingerTips2D.push_back( fingerTipArgs ) ; 
+
+	string handsOpenStatus = handString + "IsOpen" ; 
+	handsOpenHandle.push_back( m_device->registerDataHandle<bool>( handsOpenStatus.c_str() ) ) ; 
+	handsOpen.push_back( false ) ; 
+
+	string handOpenAmount = handString + "Openness" ; 
+	handsOpenAmountHandle.push_back( m_device->registerDataHandle<float>( handOpenAmount.c_str() ) ) ; 
+	handsOpenAmount.push_back( 0.0f ) ; 
+
+
+	//vector<bool>								handsOpen ; 
+//		vector<float>								handsOpenAmount ; 	
+
+
+	numHands++ ; 
+
+	return ( iisuIndex - 1 ) ; 
+}
+
 void IisuServer::initIisu() 
 {
 	//User
@@ -112,15 +160,6 @@ void IisuServer::initIisu()
 	if ( bCloseInteraction == true ) 
 	{
 		m_CI_EnabledHandle = m_device->registerParameterHandle<bool>("CI.Enabled") ; 
-		m_hand1_statusHandle = m_device->registerDataHandle<int32_t>("CI.HAND1.Status") ; 
-		m_hand1_palmPositionHandle = m_device->registerDataHandle<Vector2>("CI.HAND1.PalmPosition2D" ) ; 
-		m_hand1_fingerTipsHandle = m_device->registerDataHandle<SK::Array<Vector2>>("CI.HAND1.FingerTipPositions2D" ) ; 
-		m_hand1_fingerTipsStatusHandle = m_device->registerDataHandle<SK::Array<int32_t>>("CI.HAND1.FingerStatus" ) ; 
-		m_hand1_tipPosition2DHandle = m_device->registerDataHandle<Vector2>("CI.HAND1.TipPosition2D" ) ; 
-		//DataHandle<Vector3>							m_hand1_tipPosition3DHandle ; 
-
-		m_hand1_openHandle = m_device->registerDataHandle<bool>("CI.HAND1.IsOpen" ) ; 
-		m_hand1_openAmountHandle = m_device->registerDataHandle<float>("CI.HAND1.Openness" ) ; 
 		Result res = m_device->getEventManager().registerEventListener( "CI.HandActivated" , *this , &IisuServer::handActivatedHandler ) ; 
 		if ( res.failed() )
 			cout << "failed to regsiter CI.HandActivated!" << endl ; 
@@ -243,15 +282,15 @@ void IisuServer::onDataFrame(const DataFrameEvent& event)
 
 	if ( bCloseInteraction ) 
 	{
-		m_hand1_status = m_hand1_statusHandle.get( ) ; 
-		if ( m_hand1_status >  0 ) 
+		for ( int i = 0 ; i < handStatuses.size() ; i++ ) 
 		{
-			m_hand1_palmPosition = m_hand1_palmPositionHandle.get() ;
-			m_hand1_fingerTipsStatus = m_hand1_fingerTipsStatusHandle.get() ; 
-			m_hand1_fingerTips = m_hand1_fingerTipsHandle.get() ; 
-			m_hand1_open = m_hand1_openHandle.get() ; 
-			m_hand1_openAmount = m_hand1_openAmountHandle.get() ;
-			m_hand1_tipPosition2D = m_hand1_tipPosition2DHandle.get() ; 
+			handStatuses[i] = handStatusesHandle[i].get() ; 
+			handPalmPositions2D[i] = handPalmPositions2DHandle[i].get() ; 
+			handTipPositions2D[i] = handTipPositions2DHandle[i].get() ; 
+			handsOpen[i] = handsOpenHandle[i].get() ; 
+			handsOpenAmount[i] = handsOpenAmountHandle[i].get() ; 
+			handFingerTipsStatus[i] = handFingerTipsStatusHandle[i].get() ; 
+			handFingerTips2D[i] = handFingerTips2DHandle[i].get() ;
 		}
 	}
 	
@@ -409,4 +448,76 @@ void IisuServer::exit ( int exitCode )
 	cout << "IISU ERROR ! Exit Code of : " << exitCode << endl ; 
 
 	ofNotifyEvent( IisuEvents::Instance()->exitApplication , exitCode , this ) ; 
+}
+
+int IisuServer::getHandStatus ( int handID ) 
+{
+	if ( handID < handStatuses.size() ) 
+		return handStatuses[ handID ] ; 
+	else
+		cout << "IisuServer::getHandStatus :: INVALID INDEX" << endl ;
+
+	return -1 ; 
+}
+	
+Vector2 IisuServer::getHandPalmPosition2D ( int handID ) 
+{
+	if ( handID < handPalmPositions2D.size() ) 
+		return handPalmPositions2D[ handID ] ; 
+	else
+		cout << "IisuServer::getHandPalmPosition2D :: INVALID INDEX" << endl ;
+
+	return Vector2() ; 
+}
+
+Vector2 IisuServer::getHandTipPosition2D( int handID ) 
+{
+	if ( handID < handTipPositions2D.size() ) 
+		return handTipPositions2D[ handID ] ; 
+	else
+		cout << "IisuServer::getHandTipPosition2D :: INVALID INDEX" << endl ;
+
+	return Vector2() ; 
+}
+
+bool IisuServer::getHandsOpen ( int handID ) 
+{
+	if ( handID < handsOpen.size() ) 
+		return handsOpen[ handID ] ; 
+	else
+		cout << "IisuServer::getHandsOpen :: INVALID INDEX" << endl ;
+
+	return false ;
+}
+
+float IisuServer::getHandsOpenAmount ( int handID ) 
+{
+	if ( handID < handsOpenAmount.size() ) 
+		return handsOpenAmount[ handID ] ; 
+	else
+		cout << "IisuServer::getHandsOpenAmount :: INVALID INDEX" << endl ;
+
+	return 0.0f ; 
+}
+
+SK::Array<int32_t> IisuServer::getHandsFingerTipsStatus ( int handID ) 
+{
+	if ( handID < handFingerTipsStatus.size() ) 
+		return handFingerTipsStatus[handID] ; 
+	else
+		cout << "IisuServer::getHandsOpenAmount :: INVALID INDEX" << endl ;
+
+	SK::Array<int32_t> args ; 
+	return args;  
+}
+
+SK::Array<Vector2> IisuServer::getHandsFingerTips2D ( int handID ) 
+{
+	if ( handID < handFingerTips2D.size() ) 
+		return handFingerTips2D[ handID ] ; 
+	else
+		cout << "IisuServer::getHandsOpenAmount :: INVALID INDEX" << endl ;
+
+	SK::Array<Vector2> args ; 
+	return args ; 
 }
