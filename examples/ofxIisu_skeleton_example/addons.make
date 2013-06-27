@@ -1,0 +1,7 @@
+ofxXmlSettings
+ofxFTGL
+ofxHeliosLibs
+ofxIisu
+ofxTextSuite_ofxFTGL
+ofxTweenzor
+ofxUI

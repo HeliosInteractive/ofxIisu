@@ -11,6 +11,8 @@ Base
 #include <SDK/iisuSDK.h>
 #include "ofMain.h"
 #include "IisuServer.h"
+#include "IisuUtils.h"
+
 
 class IisuSkeleton
 {
@@ -23,17 +25,25 @@ class IisuSkeleton
 
 		bool	m_userManagementEnabled;
 
-		void setup ( ) ; 
-		void update ( ) ; 
-		void draw ( ) ; 
+		virtual void setup ( ) ; 
+		virtual void update ( ) ; 
+		virtual void draw ( ) ; 
+		virtual void debugDraw( ) ; 
 
-		bool bTracked ; 
-		bool bDebugRender ; 
+		bool getIsTracked( ) { return bTracked ; } 
+		bool bTracked ;			//If the skeleton is being tracked 
+		bool bDebugRender ;		
 
 		ofRectangle bounds ;
+		
+		ofPoint offset ; 
+		ofPoint scale ; 
 		ofVec3f centroid ; 
 		bool bFlipX , bFlipY ; 
-
-		vector<ofPoint> rawPositions ; 
-		vector<ofPoint> positions ; 
+		bool bEqualScaling ; 
+		vector<ofPoint> rawPositions ;		//RAW iisu positions ( y + Z are switched ) they are in meters from the world center 
+											//the world center is wherever you calibrated your t-stance post in playzone setup
+		vector<ofPoint> positions ;			//offset + scaled positions , y + z back to normal
+		vector<float> jointSizes ;			
+		vector<ofColor> jointColors ;
 };

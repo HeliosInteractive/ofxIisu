@@ -7,21 +7,16 @@
 #include "Tweenzor.h" 
 #include "IisuUserRepresentation.h"
 
-#ifndef MOUSE_DEBUG
 //iisuSDK global header (includes all iisu functionalities)
 #include <SDK/iisuSDK.h>
 #include <iostream>
 #include "IisuSkeleton.h"
-#endif
 
-#ifdef WIN32
 #include <windows.h>
-#endif
 
-#ifndef MOUSE_DEBUG
 using namespace SK;
 using namespace std;
-#endif
+
 
 #include "ofxUI.h"
 
@@ -44,12 +39,10 @@ class testApp : public ofBaseApp{
 		void exit();
 		void exitEventHandler ( int &exitCode ) ; 
 
-#ifndef MOUSE_DEBUG
 		//Iisu
 		IisuServer * iisuServer ; 
 		IisuUserRepresentation userRep ; 
 		IisuSkeleton iisuSkeleton ; 
-#endif
 
 		ofxUICanvas *gui;   	
 		void guiEvent(ofxUIEventArgs &e);

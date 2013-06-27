@@ -3,12 +3,13 @@
 	
 void DepthCursor::setup ( IisuServer * _iisu , int _cursorID , ofColor _color ) 
 {
+	bActive = false ; 
 	iisu = _iisu ; 
 	color = _color ; 
 	cursorID = _cursorID ; 
 	cursorStatus = 0 ; 
-	position = ofVec2f () ; 
-	
+	position = ofVec3f () ; 
+	bDebugDraw = false ; 	
 	ofAddListener( IisuEvents::Instance()->CURSOR_DETECTED , this , &DepthCursor::cursorFoundHandler ) ; 
 	ofAddListener( IisuEvents::Instance()->CURSOR_LOST , this , &DepthCursor::cursorLostHandler ) ; 
 	ofAddListener( IisuEvents::Instance()->CURSOR_DESTROYED , this , &DepthCursor::cursorDestroyedHandler ) ;
@@ -16,18 +17,10 @@ void DepthCursor::setup ( IisuServer * _iisu , int _cursorID , ofColor _color )
 
 void DepthCursor::update( ) 
 {
-	//update IISU
-	if ( iisu->m_device==NULL || iisu->m_iisuHandle==NULL )
-	{
-		//IISU is broken !
-		cout << "IISU IS BROKEN !" << endl ; 
-		return ;
-	}		
-
 	cursorStatus = iisu->getCursorStatus( cursorID ) ; 
 
 	//Calculate the palm position
-	ofVec3f desiredLoc = iisu->iisuPointToOF( iisu->getNormalizedCursorCoordinates( cursorID ) ) ; 
+	ofVec3f desiredLoc = IisuUtils::Instance()->iisuPointToOF( iisu->getNormalizedCursorCoordinates( cursorID ) ) ; 
 	
 	//Limit positions so that the cursor never goes off of the edge
 	float padding = 50 ; 
@@ -45,8 +38,7 @@ void DepthCursor::update( )
 		desiredLoc.y = maxY ; 
 
 	//A little interpolation goes a long way to make it look smoother
-	Tweenzor::add( &position.x , position.x , desiredLoc.x , 0.0f , 0.12f , EASE_OUT_QUAD ) ; 
-	Tweenzor::add( &position.y , position.y , desiredLoc.y , 0.0f , 0.12f , EASE_OUT_QUAD ) ; 
+	position = position.interpolate( desiredLoc , 0.5 ) ; 
 }
 
 void DepthCursor::draw ( ) 

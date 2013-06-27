@@ -27,7 +27,18 @@ If you notice any issues please submit them on github ! And I will get to them.
 
 This addon is written specifically for the iisu 3.5 SDK
 
-External Dependencies
+/* Installation Instructions */
+includes : 
+
+..\..\..\addons\ofxIisu\src
+
+Linker Folders:
+$(IISU_SDK_DIR)\lib
+
+Linker Inputs:
+iisuSDK.lib
+
+External Dependencies for examples
 
 ofxTweenzor - https://github.com/NickHardeman/ofxTweenzor
 ofxUI - https://github.com/rezaali/ofxUI

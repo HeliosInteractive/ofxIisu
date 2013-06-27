@@ -7,8 +7,8 @@ void testApp::setup(){
 	ofAddListener ( IisuEvents::Instance()->exitApplication , this , &testApp::exitEventHandler ) ; 
 
 	//Setup IISU server
-	iisuServer = new IisuServer() ; 
-	iisuServer->setup() ; 
+	iisuServer = new IisuServer( ) ; 
+	iisuServer->setup( false ) ; 
 	iisuServer->initIisu() ; 
 
 	userRep = IisuUserRepresentation() ; 
@@ -24,13 +24,6 @@ void testApp::setup(){
 	ofSetVerticalSync( true ) ; 
 	ofSetFrameRate( 60 ) ; 
 
-	//hand = HandCursor() ; 
-	//hand.setup( ) ; 
-
-#ifndef MOUSE_DEBUG
-	//hand.iisu = &iisuServer ; 
-#endif
-
 	float dim = 24; 
 	float xInit = OFX_UI_GLOBAL_WIDGET_SPACING; 
     float length = 320-xInit; 
@@ -39,6 +32,7 @@ void testApp::setup(){
     
     gui = new ofxUICanvas(0, 0, length+xInit, ofGetHeight());
 
+	gui->addLabel ( "Iisu Skeleton Params" ) ;
     gui->addWidgetDown(new ofxUILabel("IISU SKELETON PARAMETERS", OFX_UI_FONT_LARGE));         
 	//gui->addWidgetDown(new ofxUILabel("NORMAL SLIDER", OFX_UI_FONT_MEDIUM)); 	
     gui->addWidgetDown(new ofxUISlider(length-xInit,dim, 0 , ofGetWidth() * 2 ,  iisuSkeleton.bounds.x , "BOUNDS X")); 
@@ -47,7 +41,7 @@ void testApp::setup(){
 	gui->addWidgetDown(new ofxUISlider(length-xInit,dim, 0 , ofGetWidth() ,  iisuSkeleton.bounds.height , "BOUNDS HEIGHT")); 
 	gui->addWidgetDown(new ofxUILabelToggle( iisuSkeleton.bFlipX, "FLIP X", OFX_UI_FONT_MEDIUM)); 
 	gui->addWidgetDown(new ofxUILabelToggle( iisuSkeleton.bFlipY, "FLIP Y", OFX_UI_FONT_MEDIUM)); 
-
+	gui->addWidgetDown(new ofxUILabelToggle( iisuSkeleton.bEqualScaling , "EQUAL SCALING " , ofx_UI_FONT_MEDIUM ) ) ; 
 	ofAddListener( gui->newGUIEvent,this,&testApp::guiEvent );	
 
 	gui->loadSettings( "GUI/iisuSkeleton.xml" ) ; 
@@ -59,18 +53,16 @@ void testApp::update(){
 
 	Tweenzor::update( ofGetElapsedTimeMillis() ) ; 
 
-	if ( ofGetElapsedTimef() > 6.0f ) 
-	{
+	
 	if ( iisuServer->m_device==NULL || iisuServer->m_iisuHandle==NULL )
-		{
-			cout << "Iisu is not initialized" <<endl;
-			getchar();
-			return ; 
-		}
-
-		iisuSkeleton.update ( ) ; 
-		userRep.update() ; 
+	{
+		cout << "Iisu is not initialized" <<endl;
+		return ; 
 	}
+
+	iisuSkeleton.update ( ) ; 
+	userRep.update() ; 
+	
 }
 
 //--------------------------------------------------------------
@@ -178,8 +170,7 @@ void testApp::exitEventHandler ( int &exitCode )
 
 void testApp::exit( ) 
 {
-	/*
-	#ifndef MOUSE_DEBUG
+
 		cout << "testApp::exit" << endl ; 
 		// if we have iisu device
 		if ( iisuServer->m_device )
@@ -187,6 +178,7 @@ void testApp::exit( )
 			// clear the device pointer
 			iisuServer->m_device = NULL;
 		
+		}
 
 		// if we have iisu handle
 		if ( iisuServer->m_iisuHandle )
@@ -195,9 +187,9 @@ void testApp::exit( )
 			SK::Result res = Context::Instance().destroyHandle( *iisuServer->m_iisuHandle );
 			if(res.failed())
 			{
-				cerr << "Failed to destroy handle!" << endl
+				cout << "Failed to destroy handle!" << endl
 					<< "Error " << res.getErrorCode() << ": " << res.getDescription().ptr() << endl;
-				getchar();
+				//getchar();
 			}
 			// cleat the iisu handle
 			iisuServer->m_iisuHandle = NULL;
@@ -205,6 +197,5 @@ void testApp::exit( )
 
 		// finalize context
 		Context::Instance().finalize();
-		ofSleepMillis( 5000 ) ; 
-	#endif*/
+		//ofSleepMillis( 5000 ) ; 
 }

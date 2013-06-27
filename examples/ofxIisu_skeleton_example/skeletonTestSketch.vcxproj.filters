@@ -1,0 +1,414 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\testApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.cpp">
+      <Filter>addons\ofxXmlSettings\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.cpp">
+      <Filter>addons\ofxXmlSettings\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlerror.cpp">
+      <Filter>addons\ofxXmlSettings\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp">
+      <Filter>addons\ofxXmlSettings\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxFTGL\src\ofxFTGLFont.cpp">
+      <Filter>addons\ofxFTGL\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxHeliosLibs\src\MultiTouchActions.cpp">
+      <Filter>addons\ofxHeliosLibs\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxHeliosLibs\src\MultiTouchCursor.cpp">
+      <Filter>addons\ofxHeliosLibs\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxHeliosLibs\src\MultiTouchObject.cpp">
+      <Filter>addons\ofxHeliosLibs\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxHeliosLibs\src\ofxAlphaStackItem.cpp">
+      <Filter>addons\ofxHeliosLibs\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxHeliosLibs\src\ofxMatrixTransformObject.cpp">
+      <Filter>addons\ofxHeliosLibs\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxHeliosLibs\src\ofxTransitionItem.cpp">
+      <Filter>addons\ofxHeliosLibs\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxIisu\src\CloseIisuServer.cpp">
+      <Filter>addons\ofxIisu\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxIisu\src\DepthCursor.cpp">
+      <Filter>addons\ofxIisu\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxIisu\src\HandCursor.cpp">
+      <Filter>addons\ofxIisu\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxIisu\src\IisuServer.cpp">
+      <Filter>addons\ofxIisu\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxIisu\src\IisuSkeleton.cpp">
+      <Filter>addons\ofxIisu\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxTweenzor\src\Tween.cpp">
+      <Filter>addons\ofxTweenzor\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxTweenzor\src\Tweenzor.cpp">
+      <Filter>addons\ofxTweenzor\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxIisu\src\IisuUserRepresentation.cpp">
+      <Filter>addons\ofxIisu\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons">
+      <UniqueIdentifier>{71834f65-f3a9-211e-73b8-dc8563776aec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxXmlSettings">
+      <UniqueIdentifier>{877f005d-13e6-0592-1d97-f2e39d804d43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxXmlSettings\src">
+      <UniqueIdentifier>{ccb2ac63-49d2-977c-cfe8-aeadb8be6a99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxXmlSettings\libs">
+      <UniqueIdentifier>{687714a8-1662-fa1c-261f-50f068335398}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxFTGL">
+      <UniqueIdentifier>{57563682-f5c8-32f7-8507-391bc1f1894f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxFTGL\src">
+      <UniqueIdentifier>{dab99e66-bff9-d8fc-4903-714c828d436c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxFTGL\libs">
+      <UniqueIdentifier>{a27be0c5-eba8-b296-a7fc-2d5d0a2aca0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxFTGL\libs\FTGL">
+      <UniqueIdentifier>{a1802bb1-f112-3ed7-7aa3-2dc0935bd9fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxFTGL\libs\FTGL\include">
+      <UniqueIdentifier>{193cbacb-1aee-e0f8-a1b8-adc6019848e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxFTGL\libs\FTGL\include\FTGL">
+      <UniqueIdentifier>{c73df1b7-81e5-1b03-29a4-6b8f3cd35731}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxHeliosLibs">
+      <UniqueIdentifier>{9242c2c7-5a8a-77bd-7e09-babe8a96bc35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxHeliosLibs\src">
+      <UniqueIdentifier>{ea348405-da09-a5a6-2eae-c1f2b9611f4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxIisu">
+      <UniqueIdentifier>{edc8e385-fc28-3684-b54d-cb5c30f12ff2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxIisu\src">
+      <UniqueIdentifier>{a6d0e50e-612d-7669-e1a6-f6596bad633b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxTweenzor">
+      <UniqueIdentifier>{01c39ff4-5b53-3070-c89a-17508067e01a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxTweenzor\src">
+      <UniqueIdentifier>{5d58d81d-c685-e91e-0e62-80f40001ebcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxUI">
+      <UniqueIdentifier>{b492c5b0-ff91-9c5a-638a-31420f9e8d66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxUI\src">
+      <UniqueIdentifier>{a00c2d23-6c11-bc86-3993-2cf0e345f895}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\testApp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.h">
+      <Filter>addons\ofxXmlSettings\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.h">
+      <Filter>addons\ofxXmlSettings\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFTGL\src\ofxFTGLFont.h">
+      <Filter>addons\ofxFTGL\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFTGL\libs\FTGL\include\FTGL\FTBBox.h">
+      <Filter>addons\ofxFTGL\libs\FTGL\include\FTGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFTGL\libs\FTGL\include\FTGL\FTBitmapGlyph.h">
+      <Filter>addons\ofxFTGL\libs\FTGL\include\FTGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFTGL\libs\FTGL\include\FTGL\FTBuffer.h">
+      <Filter>addons\ofxFTGL\libs\FTGL\include\FTGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFTGL\libs\FTGL\include\FTGL\FTBufferFont.h">
+      <Filter>addons\ofxFTGL\libs\FTGL\include\FTGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFTGL\libs\FTGL\include\FTGL\FTBufferGlyph.h">
+      <Filter>addons\ofxFTGL\libs\FTGL\include\FTGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFTGL\libs\FTGL\include\FTGL\FTExtrdGlyph.h">
+      <Filter>addons\ofxFTGL\libs\FTGL\include\FTGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFTGL\libs\FTGL\include\FTGL\FTFont.h">
+      <Filter>addons\ofxFTGL\libs\FTGL\include\FTGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFTGL\libs\FTGL\include\FTGL\ftgl.h">
+      <Filter>addons\ofxFTGL\libs\FTGL\include\FTGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFTGL\libs\FTGL\include\FTGL\FTGLBitmapFont.h">
+      <Filter>addons\ofxFTGL\libs\FTGL\include\FTGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFTGL\libs\FTGL\include\FTGL\FTGLExtrdFont.h">
+      <Filter>addons\ofxFTGL\libs\FTGL\include\FTGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFTGL\libs\FTGL\include\FTGL\FTGLOutlineFont.h">
+      <Filter>addons\ofxFTGL\libs\FTGL\include\FTGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFTGL\libs\FTGL\include\FTGL\FTGLPixmapFont.h">
+      <Filter>addons\ofxFTGL\libs\FTGL\include\FTGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFTGL\libs\FTGL\include\FTGL\FTGLPolygonFont.h">
+      <Filter>addons\ofxFTGL\libs\FTGL\include\FTGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFTGL\libs\FTGL\include\FTGL\FTGLTextureFont.h">
+      <Filter>addons\ofxFTGL\libs\FTGL\include\FTGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFTGL\libs\FTGL\include\FTGL\FTGlyph.h">
+      <Filter>addons\ofxFTGL\libs\FTGL\include\FTGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFTGL\libs\FTGL\include\FTGL\FTLayout.h">
+      <Filter>addons\ofxFTGL\libs\FTGL\include\FTGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFTGL\libs\FTGL\include\FTGL\FTOutlineGlyph.h">
+      <Filter>addons\ofxFTGL\libs\FTGL\include\FTGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFTGL\libs\FTGL\include\FTGL\FTPixmapGlyph.h">
+      <Filter>addons\ofxFTGL\libs\FTGL\include\FTGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFTGL\libs\FTGL\include\FTGL\FTPoint.h">
+      <Filter>addons\ofxFTGL\libs\FTGL\include\FTGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFTGL\libs\FTGL\include\FTGL\FTPolyGlyph.h">
+      <Filter>addons\ofxFTGL\libs\FTGL\include\FTGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFTGL\libs\FTGL\include\FTGL\FTSimpleLayout.h">
+      <Filter>addons\ofxFTGL\libs\FTGL\include\FTGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFTGL\libs\FTGL\include\FTGL\FTTextureGlyph.h">
+      <Filter>addons\ofxFTGL\libs\FTGL\include\FTGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxHeliosLibs\src\Interactive.h">
+      <Filter>addons\ofxHeliosLibs\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxHeliosLibs\src\MatrixTransformImage.h">
+      <Filter>addons\ofxHeliosLibs\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxHeliosLibs\src\MultiTouchActions.h">
+      <Filter>addons\ofxHeliosLibs\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxHeliosLibs\src\MultiTouchCursor.h">
+      <Filter>addons\ofxHeliosLibs\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxHeliosLibs\src\MultiTouchObject.h">
+      <Filter>addons\ofxHeliosLibs\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxHeliosLibs\src\ofxAlphaStackItem.h">
+      <Filter>addons\ofxHeliosLibs\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxHeliosLibs\src\ofxMatrixTransformObject.h">
+      <Filter>addons\ofxHeliosLibs\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxHeliosLibs\src\ofxTransitionItem.h">
+      <Filter>addons\ofxHeliosLibs\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxHeliosLibs\src\SoundBank.h">
+      <Filter>addons\ofxHeliosLibs\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxIisu\src\CloseIisuServer.h">
+      <Filter>addons\ofxIisu\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxIisu\src\DepthCursor.h">
+      <Filter>addons\ofxIisu\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxIisu\src\HandCursor.h">
+      <Filter>addons\ofxIisu\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxIisu\src\IisuEventArgs.h">
+      <Filter>addons\ofxIisu\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxIisu\src\IisuEvents.h">
+      <Filter>addons\ofxIisu\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxIisu\src\IisuServer.h">
+      <Filter>addons\ofxIisu\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxIisu\src\IisuSkeleton.h">
+      <Filter>addons\ofxIisu\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxIisu\src\IisuUserRepresentation.h">
+      <Filter>addons\ofxIisu\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxIisu\src\ofxIisu.h">
+      <Filter>addons\ofxIisu\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxTweenzor\src\ofxTweenzor.h">
+      <Filter>addons\ofxTweenzor\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxTweenzor\src\Tween.h">
+      <Filter>addons\ofxTweenzor\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxTweenzor\src\TweenEvent.h">
+      <Filter>addons\ofxTweenzor\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxTweenzor\src\TweenFunctions.h">
+      <Filter>addons\ofxTweenzor\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxTweenzor\src\TweenSelector.h">
+      <Filter>addons\ofxTweenzor\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxTweenzor\src\Tweenzor.h">
+      <Filter>addons\ofxTweenzor\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUI.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUI2DGraph.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUI2DPad.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIBaseDraws.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIBiLabelSlider.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIButton.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUICanvas.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUICanvas.h.save">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUICircleSlider.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUICustomImageButton.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIDropDownList.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIEventArgs.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIFPS.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIFPSSlider.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIImage.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIImageButton.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIImageSampler.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIImageSlider.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIImageToggle.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUILabel.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUILabelButton.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUILabelToggle.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIMinimalSlider.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIMovingGraph.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIMultiImageButton.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIMultiImageSlider.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIMultiImageToggle.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUINumberDialer.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIRadio.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIRangeSlider.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIRectangle.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIRotarySlider.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIScrollableCanvas.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUISlider.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUISpacer.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUISpectrum.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUISuperCanvas.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUITextArea.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUITextInput.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIToggle.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIToggleMatrix.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIValuePlotter.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIWaveform.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIWidget.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIWidgetWithLabel.h">
+      <Filter>addons\ofxUI\src</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

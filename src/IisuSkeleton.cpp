@@ -1,37 +1,51 @@
 #include "IisuSkeleton.h"
-#include "Tweenzor.h"
-
 void IisuSkeleton::setup ( )
 {
 	bTracked  = false ;  
 	bDebugRender = true  ; 
-	bounds = ofRectangle ( 0 , 0 , ofGetWidth() , ofGetHeight() ) ; 
 	bFlipX = false ; 
 	bFlipY = false ;
-
+	bEqualScaling = false ; 
 	glEnable(GL_DEPTH_TEST);
+
+	int totalJoints = 21 ; 
+	for ( int i = 0 ; i < totalJoints ; i++ ) 
+	{
+		jointSizes.push_back( 4 ) ; 
+		jointColors.push_back( ofColor( ofColor::white ) ) ; 
+	}
 }
 
 
 void IisuSkeleton::update ( ) 
 {
-	bool isTracked = iisu->m_skeletonStatus ; 
-	if ( isTracked != 0 ) 
+	bTracked = iisu->m_skeletonStatus ; 
+	if ( bTracked != 0 ) 
 	{		
 		SK::Array<SK::Vector3> keyPoints = iisu->m_keyPoints ; 		
 		SK::Array<float> keyPointsConfidence = iisu->m_keyPointsConfidence ; 
 
-		centroid = iisu->IIsuPosition3DToOfxScreen( keyPoints[SK::SkeletonEnum::WAIST ] , bounds , bFlipX , bFlipY ) ;  
 
-		//Get our two hands
-		ofVec2f rightHand = iisu->IIsuPosition3DToOfxScreen( keyPoints[SK::SkeletonEnum::RIGHT_WRIST ] , bounds , bFlipX , bFlipY ) ; 
-		ofVec2f leftHand = iisu->IIsuPosition3DToOfxScreen( keyPoints[SK::SkeletonEnum::LEFT_WRIST ] , bounds , bFlipX , bFlipY ) ; 
+		rawPositions.clear( ) ; 
+		positions.clear( ) ; 
+		for ( int i = 0 ; i < keyPoints.size() ; i++ ) 
+		{
+			//Use the helper function to get the right coordinate spaces
+			ofPoint _p = ofPoint ( keyPoints[i].x * bounds.width, keyPoints[i].y * bounds.height , keyPoints[i].z ) + offset ; 
+			rawPositions.push_back ( _p ) ;
+			Vector3 keyP = keyPoints[i] ; 
+			keyP.x += offset.x ; 
+			keyP.y += offset.z ; 
+			keyP.z += offset.y ; 
+			ofVec3f _scale = ofVec3f( scale.x , scale.x , scale.x ) ; 
+			ofVec3f p = IisuUtils::Instance()->iisuPosition3DToOfxScreen( keyP , bounds , bFlipX , bFlipY ) ; 
+			positions.push_back( p ) ; 
+		}
 
-		centroid = iisu->IIsuPosition3DToOfxScreen( keyPoints[SK::SkeletonEnum::WAIST ] , bounds , bFlipX , bFlipY ) ;  
+		centroid = positions[ SK::SkeletonEnum::WAIST ] ;   
 	}
 	else
 	{
-
 		bTracked  = false ;  
 	}
 }
@@ -39,47 +53,30 @@ void IisuSkeleton::update ( )
 void IisuSkeleton::draw ( ) 
 {
 
-	bool isTracked = iisu->m_skeletonStatus ; 
+	//bool isTracked = iisu->m_skeletonStatus ; 
 
-	if ( isTracked != 0 ) 
+	if ( bTracked != false ) 
 	{		
-		SK::Array<SK::Vector3> keyPoints = iisu->m_keyPoints ; 		
-		SK::Array<float> keyPointsConfidence = iisu->m_keyPointsConfidence ; 
 		ofSetColor ( ofColor::red ) ; 
-
-		rawPositions.clear( ) ; 
-		positions.clear( ) ; 
-		for ( int i = 0 ; i < keyPoints.size() ; i++ ) 
+		for ( int i = 0 ; i < positions.size() ; i++ ) 
 		{
 			//Use the helper function to get the right coordinate spaces
-			rawPositions.push_back ( ofPoint ( keyPoints[i].x , keyPoints[i].y , keyPoints[i].z ) ) ; 
-			ofVec3f p = iisu->IIsuPosition3DToOfxScreen( keyPoints[i] , bounds , bFlipX , bFlipY ) ; 
-			positions.push_back( p ) ; 
 			ofPushMatrix() ; 
-				ofTranslate( p.x , p.y , p.z * 400 ) ; 
-				ofSphere( 0 , 0 , 0, 8 ) ; 
+				ofTranslate( positions[i].x , positions[i].y , positions[i].z ) ; 
+				ofSetColor( jointColors[ i ] ) ; 
+				ofSphere( 0 , 0 , 0, jointSizes[ i ] ) ; 
 			ofPopMatrix() ; 
- 
 		}
+	}
+}
 
-		//Get our two hands
-		ofVec3f rightHand = iisu->IIsuPosition3DToOfxScreen( keyPoints[SK::SkeletonEnum::RIGHT_WRIST ] , bounds , bFlipX , bFlipY ) ; 
-		ofVec3f leftHand = iisu->IIsuPosition3DToOfxScreen( keyPoints[SK::SkeletonEnum::LEFT_WRIST ] , bounds , bFlipX , bFlipY ) ;
-		//Fake the Z a little bit, it comes in from IISU as between -1 and 1
-		rightHand.z *= 400.0f ; 
-		leftHand.z *= 400.0f ; 
-
-		ofPushStyle() ; 
-			ofNoFill() ; 
-			ofSetColor( 0 , 255 , 0 ) ; 
-			if ( rightHand.y > leftHand.y ) 
-			{
-				ofCircle( rightHand.x , rightHand.y , 25 ) ; 
-			}
-			else
-			{
-				ofCircle( leftHand.x , leftHand.y , 25 ) ; 
-			}
-		ofPopStyle() ; 
+void IisuSkeleton::debugDraw( ) 
+{
+	if( positions.size() > 0 ) 
+	{
+		ofVec3f rightHand = positions[SK::SkeletonEnum::RIGHT_WRIST ] ; 
+		ofVec3f leftHand = positions[SK::SkeletonEnum::LEFT_WRIST ] ;
+		//string status = " x :" + ofToString ( rightHand.x ) + ",y:"+ofToString( rightHand.y) +",z:"+ofToString(rightHand.z ) ; 
+		//ofDrawBitmapStringHighlight( status , 15 , ofGetHeight() - 60 ) ; 
 	}
 }

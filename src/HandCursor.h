@@ -1,43 +1,28 @@
 #pragma once
 
-#include "ofMain.h"
-#include "CloseIisuServer.h"
-#include "Tweenzor.h"
-#include "HeliosDebug.h"
+#include "DepthCursor.h"
+#include "HandCursorFinger.h"
+
 //#define MOUSE_DEBUG 1
 
-class HandCursor
+class HandCursor : public DepthCursor
 {
 	public :
-		HandCursor( ) { } 
+		HandCursor( ) { }
 
-		struct Finger
-		{
-			int status ; 
-			ofVec2f pt ; 
-			float radius ; 
-		};
-
-		CloseIisuServer * iisu ; 
-
-		void setup ( ) ; 
+		void setup ( IisuServer * _iisu , int _cursorID , ofColor _color ) ; 
 		void update ( ) ; 
-		void updateIisu ( ) ;
 		void draw ( ) ; 
 		void debugDraw( ) ; 
 
-		vector<Finger*> fingers ;  
-		ofVec3f palmPosition ; 
-		ofVec3f fingerCentroid ; 
+		vector<HandCursorFinger*> fingers ;   
 		
 		float zFactor ; 
 
 		int activeFingers ; 
-		float palmWeighting ;
-
-		bool bTracked ; 
-
+		ofVec2f handTipPosition ; 
 
 		bool bOpen ; 
 		float openAmount ; 
+		float handOpenThreshold ; 
 };
