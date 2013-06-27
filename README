@@ -31,6 +31,7 @@ This addon is written specifically for the iisu 3.5 SDK
 includes : 
 
 ..\..\..\addons\ofxIisu\src
+..\..\..\addons\ofxIisu\iisu
 
 Linker Folders:
 $(IISU_SDK_DIR)\lib
@@ -46,6 +47,6 @@ ofxUI - https://github.com/rezaali/ofxUI
 
 Examples :
 	ofxIISU_skeleton_tracking - simple example with skeleton tracking and rendering
-	ofxIISU_userRep - simple example with just a user rep
+	ofxIISU_ui_cursors - simple example with IISU Controllers( cursors ) 
 	ofxIISU_handTracking_shell - simple Close Interaction example with 3D ribbons and gestures
 	
